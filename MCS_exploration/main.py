@@ -78,8 +78,8 @@ def explore_all_scenes():
     #scene_types = ['retrieval_goal-', 'traversal_goal-', 'transferral_goal-']
     #scene_types = ['retrieval_goal-', 'traversal_goal-']#, 'transferral_goal-']
     #scene_types = ['transferral_goal-']
-    scene_types = ['traversal_goal-']
-    #scene_types = ['retrieval_goal-']
+    #scene_types = ['traversal_goal-']
+    scene_types = ['retrieval_goal-']
 
 
     #scene_numbers = ['0933','0934','0935']
@@ -113,7 +113,7 @@ def explore_all_scenes():
             
             current_explored = 0
             #new_data, bounds, goal_pose = sequence_generator.explore_scene(str(scene_type)+ scene_number + ".json")
-            number_actions = sequence_generator.explore_3d_scene(str(scene_type)+ scene_number + ".json")
+            number_actions = sequence_generator.explore_3d_scene(str(scene_type)+ scene_number + ".json",event=None)
             #exit()
             current_explored_objects = sequence_generator.agent.game_state.discovered_objects
             current_explored_uuids = sequence_generator.agent.game_state.discovered_explored

@@ -38,7 +38,7 @@ class MetaController:
         self.obstacles = {}
 
         self.plannerState = None
-        self.sequence_generator_object = sequence_generator.SequenceGenerator(None,env.controller)
+        self.sequence_generator_object = sequence_generator.SequenceGenerator(None,self.env.controller)
 
 
     def plan_on_current_state(self):

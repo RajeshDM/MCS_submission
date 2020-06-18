@@ -18,8 +18,6 @@ if __name__ == "__main__":
     #while env.current_scene < len(env.all_scenes) - 1:
     if True:
         env.reset()
-        # print(env.current_scene)
-        #scene_config = main.explore_scene(sequence_generator, 'retrieval-', '0001' )
         result = metaController.excecute()
         sys.stdout.flush()
     # print(len(c.frames))

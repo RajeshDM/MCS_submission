@@ -297,118 +297,20 @@ class GameState(object):
                 self.graph.xMax - self.graph.xMin + 1,
                 self.graph.yMax - self.graph.yMin + 1]
 
-            '''
-            while not lastActionSuccess:
-                print ("In the while loop")
-                self.event = game_util.reset(self.env, self.scene_name)
-                self.event = self.event.events[0]
-                self.agent_height = self.event.metadata['agent']['position']['y']
-                self.camera_height = self.agent_height + constants.CAMERA_HEIGHT_OFFSET
-                #self.event = self.env.random_initialize(seed)
-                
-                #self.start_point = []
-                start_point_2 = []
-                #start_point_2.append(int(self.event.metadata['agent']['position']['x']/constants.AGENT_STEP_SIZE) -self.graph.xMin +1)
-                #start_point_2.append(int(self.event.metadata['agent']['position']['z']/constants.AGENT_STEP_SIZE) - self.graph.yMin +1  )
-                start_point_2.append(int(self.event.metadata['agent']['position']['x']/constants.AGENT_STEP_SIZE) )
-                start_point_2.append(int(self.event.metadata['agent']['position']['z']/constants.AGENT_STEP_SIZE) )
-                start_point_2.append(int(self.event.metadata['agent']['rotation']['y']/90)) 
-                print(start_point_2)
-                print ("starting horizon", self.event.metadata['agent']['cameraHorizon'])
-                self.start_point = start_point_2[:]
-                
-               
-                #start_point = self.local_random.randint(0, self.graph.points.shape[0] - 1)
-                #start_point = self.graph.points[start_point, :].copy()
-                #self.start_point = (start_point[0], start_point[1], self.local_random.randint(0, 3))
-                
-                
-                self.end_point = self.start_point
-                #print ("B4 the while loop for assigning end point", self.start_point)
-                while self.end_point[0] == self.start_point[0] and self.end_point[1] == self.start_point[1]:
-                    #end_point = self.local_random.randint(0, self.graph.points.shape[0] - 1)
-                    #end_point = self.graph.points[end_point, :].copy()
-                    #self.end_point = [end_point[0], end_point[1], self.local_random.randint(0, 3)]
-                    #self.end_point[0] += self.local_random.randint(-constants.TERMINAL_CHECK_PADDING, constants.TERMINAL_CHECK_PADDING)
-                    #self.end_point[1] += self.local_random.randint(-constants.TERMINAL_CHECK_PADDING, constants.TERMINAL_CHECK_PADDING)
-                    #self.end_point = tuple(self.end_point)
-                    self.end_point = (self.end_point[0]-1 , self.end_point[1]-1 , self.end_point[2])
-                    print ("In the while loop for assigning end point",self.end_point)
-                
-                
-                action = {'action': 'TeleportFull',
-                    'x': self.start_point[0] * constants.AGENT_STEP_SIZE,
-                    'y': self.agent_height,
-                    'z': self.start_point[1] * constants.AGENT_STEP_SIZE,
-                    'rotateOnTeleport': True,
-                    'rotation': self.start_point[2] * 90,
-                    'horizon': 0}
-                    #'horizon': 60}
-            '''
-            while True :
-                #self.event = game_util.reset(self.env, self.scene_name,config_filename)
-                #self.event = self.event.events[0]
+            #while True :
+            #self.event = self.event.events[0]
+            if event != None :
                 self.event = event
-                print ("type of event 2 : ", type(self.event))
-                lastActionSuccess = self.event.return_status
-                break
-                start_point_2 = []
-                '''
-                self.agent_height = self.event.metadata['agent']['position']['y']
-                self.camera_height = self.agent_height + constants.CAMERA_HEIGHT_OFFSET
-                start_point_2.append(int(self.event.metadata['agent']['position']['x']/constants.AGENT_STEP_SIZE) )
-                start_point_2.append(int(self.event.metadata['agent']['position']['z']/constants.AGENT_STEP_SIZE) )
-                start_point_2.append(int(self.event.metadata['agent']['rotation']['y']/90)) 
-                '''
-                print ("rotation ", self.event.rotation)
-                rotation_angle = -(self.event.rotation % 90)
-                action = "RotateLook, rotation=%d" %int(rotation_angle) 
-                self.goal = self.event.goal
-                #action = {'action':"Pass"}
-                #print ("z before turning ", self.event.position['z']/constants.AGENT_STEP_SIZE)
-                #print ("z before turning ", self.event.position['z'])
-                self.event = self.env.step(action)
-                #print ("z after turning ", self.event.position['z']/constants.AGENT_STEP_SIZE)
-                #print ("z after turning ", self.event.position['z'])
+            else :
+                self.event = game_util.reset(self.env, self.scene_name,config_filename)
+            print ("type of event 2 : ", type(self.event))
+            lastActionSuccess = self.event.return_status
+            #break
 
-                self.agent_height = self.event.position['y']
-                self.camera_height = self.agent_height + constants.CAMERA_HEIGHT_OFFSET
-                start_point_2.append(math.floor(self.event.position['x']/constants.AGENT_STEP_SIZE) )
-                start_point_2.append(math.floor(self.event.position['z']/constants.AGENT_STEP_SIZE) )
-                start_point_2.append(int(self.event.rotation/90)) 
-                #print(start_point_2)
-                self.start_point = start_point_2[:]
-                self.end_point = self.start_point[:]
-                self.end_point = (self.end_point[0] , self.end_point[1] , (self.end_point[2]+ 1) %4)
-                #print ("end point = ", self.end_point)
-                #print ("start point = ", self.start_point)
-                #print ("last action success", self.event['lastActionSuccess'])
-                #print (self.event)
-                #print ("last action success", self.event.lastActionSuccess)
-                #print ("number of objects : ",len(self.event.metadata['objects']))
-                #action = {"action": "RotateRight", 'rotatio#n':90}
-                #print ("type of event 3 : ", type(self.event))
-                #action = {"action": "RotateLeft", 'rotation':90}
-                #action = "RotateLook, rotation=-90"
-                #self.event = self.env.step(action)
-                #print ("type of event 4 : ", type(self.event))
-                #self.event = self.event.events[0]
-                #mcs_output = wrap_output(self.event) 
-                #lastActionSuccess = self.event.metadata['lastActionSuccess']
-                lastActionSuccess = self.event.return_status
-                print ("last action sucess" , lastActionSuccess)
-                
 
         self.process_frame()
-        #print (self.get_pose())
-        #self.pose = game_util.get_pose(self.event)
-        print ("current pose = ", self.pose)
         self.board = None
-        #point_dists = np.sum(np.abs(self.graph.points - np.array(self.end_point[:2])), axis=1)
-        #print ("jsut b4 end of function")
-        #dist_min = np.min(point_dists)
-        #self.is_possible_end_point = int(dist_min < 0.0001)
-        print ("end of reset in game state function")
+        #print ("end of reset in game state function")
 
     def step(self, action_or_ind):
         if type(action_or_ind) == int:
@@ -418,12 +320,9 @@ class GameState(object):
         t_start = time.time()
 
         #print (action)
-
         # The object nearest the center of the screen is open/closed if none is provided.
-        
         #if (action['action'] == 'OpenObject' or action['action'] == 'CloseObject') and 'objectId' not in action:
         #    game_util.set_open_close_object(action, self.event)
-        #print ("action in game step - final action to take", action)
 
         if action['action'] == 'RotateRight':
             action = "RotateLook, rotation=90" 
@@ -441,35 +340,14 @@ class GameState(object):
         '''
         '''
         #print (action)
-        #print ("number of objects discovered b4 taking action : ",len(self.discovered_objects))
         self.event = self.env.step(action)
-        #print ("type of event in step : ", type(self.event))
-        #self.event = self.event.events[0]
-        #print ("last action success", self.event.lastActionSuccess)
-        #lastActionSuccess = self.event.metadata['lastActionSuccess']
         lastActionSuccess = self.event.return_status
-        #print ("field of view", self.event.camera_field_of_view)
-        #print ("camera clipping planes ", self.event.camera_clipping_planes)
-        #print ("last action sucess" , lastActionSuccess)
-        #mcs_output = wrap_output(self.event) 
-        #print ("number of objects seen in this step : ", len(mcs_output.object_list))
-        #print ("number of objects from the event", len(self.event.metadata['objects']))
-        #for kyitem in self.event.metadata.items():
-        #    print (key)
-        #print (type(self.event.metadata['objects']))
-        #for item in self.event.metadata['objects']:
-        #    print ( item['visible'])
 
-        #for obj in mcs_output.object_list :
         for obj in self.event.object_list :
             if obj.uuid not in self.discovered_explored :
                 print ("uuid : ", obj.uuid)
                 self.discovered_explored[obj.uuid] = {0:obj.position}
                 self.discovered_objects.append(obj.__dict__)
-       
-        #with open("discovered_data.json","w") as fp:
-        #    print ("number of objects discovered until now : ",len(self.discovered_objects))
-        #    json.dump(self.discovered_objects,fp,indent=1)
 
         self.times[2, 0] += time.time() - t_start
         self.times[2, 1] += 1
@@ -480,7 +358,6 @@ class GameState(object):
         if self.event.return_status :
             self.process_frame()
         else :
-            #print ("Reason for action failure: ", self.event.metadata['errorMessage'])
             print ("Failed status : ",self.event.return_status )
 
     def draw_state(self):
