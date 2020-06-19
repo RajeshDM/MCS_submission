@@ -17,9 +17,9 @@ thor_builds/
 logs
 question_data_dump
 *weights
-SCENE_HISTORY/*.*
-MCS_exploration/SCENE_HISTORY/*.*
+/SCENE_HISTORY/*.*
+/MCS_exploration/SCENE_HISTORY/*.*
 
 /.idea/
 /ff_planner/
-planner/sample_problems/*.*
+/planner/sample_problems/*.*
