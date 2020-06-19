@@ -27,21 +27,25 @@ Function to create scene numbers from 0 to Max scene number
 
 TODO : change from min scene number to max scene number 
 '''
-def create_scene_numbers(max_scene_number):
+def create_scene_numbers(min_scene_number , max_scene_number):
     scene_numbers = []
-    for i in range (0,10):
-        for j in range (0,10):
-            for k in range(0,10):
-                for l in range(0,10):
+    for i in range (int(min_scene_number[0]),10):
+        for j in range (int(min_scene_number[1]),10):
+            for k in range(int(min_scene_number[2]),10):
+                for l in range(int(min_scene_number[3]),10):
                     if i == 0 and j == 0 and k == 0 and l == 0:
                         continue
                     scene_numbers.append(str(i)+ str(j)+ str(k)+str(l))
-                    if len(scene_numbers) >= max_scene_number:
+                    if len(scene_numbers) > int (max_scene_number) - int (min_scene_number):
                         return scene_numbers
 
 
-def explore_scene(sequence_generator,scene_type, scene_number, event):
-    sequence_generator.explore_3d_scene(str(scene_type)+ scene_number + ".json",event)
+def explore_scene(sequence_generator,event, scene_type=None, scene_number=None):
+    if scene_type != None and scene_number != None :
+        sequence_generator.explore_3d_scene(event, str(scene_type)+ scene_number + ".json")
+    else :
+        sequence_generator.explore_3d_scene(event)
+
 
     config_data = {}
     
@@ -64,6 +68,7 @@ def explore_scene(sequence_generator,scene_type, scene_number, event):
     config_data['goal'] = sequence_generator.event.goal.__dict__
     #print (config_data['goal'])
     config_data['goal']['category'] = sequence_generator.event.goal.metadata['category']
+    config_data['obstacles'] = sequence_generator.agent.nav.scene_obstacles_dict
 
     return config_data
 
@@ -85,9 +90,9 @@ def explore_all_scenes():
     #scene_numbers = ['0933','0934','0935']
     #scene_numbers = ['0058']#,'0934','0935']
     #scene_numbers = ['0002']
-    scene_numbers = create_scene_numbers(1)
+    scene_numbers = create_scene_numbers('0001', '0001')
     print (scene_numbers)
-    #exit()
+    exit()
     #scene_number = [i]
     all_data = {}
     training_data = {}
@@ -113,7 +118,8 @@ def explore_all_scenes():
             
             current_explored = 0
             #new_data, bounds, goal_pose = sequence_generator.explore_scene(str(scene_type)+ scene_number + ".json")
-            sequence_generator.explore_3d_scene(str(scene_type)+ scene_number + ".json",event=None)
+            explore_scene(sequence_generator,event=None,scene_type=scene_type,scene_number=scene_number)
+            #sequence_generator.explore_3d_scene(str(scene_type)+ scene_number + ".json",event=None)
             #exit()
             current_explored_objects = sequence_generator.agent.game_state.discovered_objects
             current_explored_uuids = sequence_generator.agent.game_state.discovered_explored

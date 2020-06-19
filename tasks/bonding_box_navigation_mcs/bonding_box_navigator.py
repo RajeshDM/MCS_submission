@@ -47,6 +47,9 @@ class BoundingBoxNavigator:
 	def clear_obstacle_dict(self):
 		self.scene_obstacles_dict = {}
 
+	def initialize_scene_dict(self,scene_dict):
+		self.scene_obstacles_dict = scene_dict
+
 	def add_obstacle_from_step_output(self, step_output):
 		for obj in step_output.object_list:
 			if obj.uuid not in self.scene_obstacles_dict and len(obj.dimensions) > 0:

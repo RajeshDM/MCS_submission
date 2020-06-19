@@ -161,10 +161,11 @@ class MetaController:
         return True
 
     def excecute(self, frame_collector=None):
-        scene_config = main.explore_scene(self.sequence_generator_object, 'retrieval-', '0001' ,self.env.step_output)
+        scene_config = main.explore_scene(self.sequence_generator_object,self.env.step_output)#'retrieval-', '0001'
         self.get_inital_planner_state(scene_config)
         if isinstance(self.nav, BoundingBoxNavigator):
             self.nav.clear_obstacle_dict()
+            self.nav.initialize_scene_dict(scene_config['obstacles'])
         meta_stage = 0
         while True:
             print("Meta-Stage: {}".format(meta_stage))

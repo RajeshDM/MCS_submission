@@ -39,7 +39,7 @@ def wrap_step( **kwargs):
 
 RUN_MCS = 1
 
-unity_app_file_path_linux = "/home/rajesh/rajesh/mcs_data/MCS-AI2-THOR-Unity-App-v0.0.6.x86_64" 
+unity_app_file_path_linux = "/home/rajesh/rajesh/mcs_data/MCS-AI2-THOR-Unity-App-v0.0.10.x86_64"
 config_file_folder_linux = "/home/rajesh/rajesh/mcs_data/interaction_scenes/"
 unity_app_file_path_mac = "/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/MacOS/MCSai2thor"
 config_file_folder_mac = "/Users/rajesh/Rajesh/Subjects/Research/aiThor/interaction_scenes/"

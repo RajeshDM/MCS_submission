@@ -35,7 +35,7 @@ class SequenceGenerator(object):
         #if isinstance(self.nav, BoundingBoxNavigator):
         #    self.env.add_obstacle_func = self.nav.add_obstacle_from_step_output
 
-    def explore_3d_scene(self,config_filename,event):
+    def explore_3d_scene(self,event,config_filename=None):
         number_actions = 0
         success_distance = 0.3
         self.scene_name = 'transferral_data'
@@ -122,25 +122,9 @@ class SequenceGenerator(object):
             number_actions = self.agent.nav.go_to_goal(new_end_point,self.agent,success_distance,self.graph,True)
             if self.agent.game_state.goals_found :
                 return
-            self.graph.explore_point(new_end_point[0], new_end_point[1], self.agent, 42.5,self.agent.nav.scene_obstacles_dict)
-
-            '''
-            while len(plan) > 0:
-                action = plan[0]
-                #print ("action to take" , action)
-                number_actions += 1
-                self.agent.step(action)
-                self.event = self.game_state.event
-                plan = plan[1:]
-                path.pop()
-                pose = game_util.get_pose(self.game_state.event)[:3]
-                #update_seen_points(pose)
-                update_seen(self.graph.graph,pose[0],pose[1],pose[2],self.game_state.event)
-             
-                #print ("pose_reached =" , pose)
-            '''
-            
-            #self.agent = explore_point(pose[0],pose[1], self.graph.graph, self.agent)
+            self.graph.explore_point(self.agent.game_state.event.position['x'],self.agent.game_state.event.position['z'], self.agent, 42.5,self.agent.nav.scene_obstacles_dict)
+            if self.agent.game_state.goals_found :
+                return
 
             '''
             flag = 0
@@ -187,16 +171,33 @@ class SequenceGenerator(object):
                 #    trials += 1
             '''
 
-            
-            #plan, path = self.agent.gt_graph.get_shortest_path(
-            #        pose, tuple(new_end_point))
-            #print ("optimal path planning done", path, plan)
             unexplored = self.graph.get_unseen()
             print (len(unexplored))
             end_time = time.time()
             print ("Time taken for 1 loop run = ", end_time - start_time)
             
         return number_actions
+
+
+    def explore_object(self, object_id_to_search):
+        uuid = object_id_to_search
+        success_distance = constants.AGENT_STEP_SIZE
+        object_polygon = self.agent.nav.scene_obstacles_dict[uuid]
+        goal_pose = object_polygon.x_list[0], object_polygon.y_list[0]
+        self.agent.nav.go_to_goal(goal_pose,self.agent,success_distance,self.graph,True)
+        action = {"action": "OpenObject", "objectId": uuid}
+        self.agent.step(action)
+
+        if self.agent.game_state.event.return_status == "SUCCESSFUL":
+            action = {"action": "RotateLook", "horizon": 30}
+            self.agent.step(action)
+            action = {"action": "RotateLook", "rotation": 15}
+            self.agent.step(action)
+            action = {"action": "RotateLook", "rotation": 15}
+            self.agent.step(action)
+            action = {"action": "RotateLook", "rotation": -45}
+            self.agent.step(action)
+
 
 if __name__ == '__main__':
     from networks.free_space_network import FreeSpaceNetwork
