@@ -22,3 +22,4 @@ MCS_exploration/SCENE_HISTORY/*.*
 
 /.idea/
 /ff_planner/
+planner/sample_problems/*.*
