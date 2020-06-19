@@ -84,8 +84,8 @@ def explore_all_scenes():
 
     #scene_numbers = ['0933','0934','0935']
     #scene_numbers = ['0058']#,'0934','0935']
-    scene_numbers = ['0001']
-    #scene_numbers = create_scene_numbers(2)
+    #scene_numbers = ['0002']
+    scene_numbers = create_scene_numbers(1)
     print (scene_numbers)
     #exit()
     #scene_number = [i]
@@ -113,13 +113,13 @@ def explore_all_scenes():
             
             current_explored = 0
             #new_data, bounds, goal_pose = sequence_generator.explore_scene(str(scene_type)+ scene_number + ".json")
-            number_actions = sequence_generator.explore_3d_scene(str(scene_type)+ scene_number + ".json",event=None)
+            sequence_generator.explore_3d_scene(str(scene_type)+ scene_number + ".json",event=None)
             #exit()
             current_explored_objects = sequence_generator.agent.game_state.discovered_objects
             current_explored_uuids = sequence_generator.agent.game_state.discovered_explored
             current_explored = len(current_explored_objects)
             
-            total_actions += number_actions
+            total_actions += sequence_generator.agent.game_state.number_actions
             #sequence_generator.agent.game_state.env.end_scene('', 0.0) 
             goal = sequence_generator.agent.game_state.event.goal
             goal_objects = []

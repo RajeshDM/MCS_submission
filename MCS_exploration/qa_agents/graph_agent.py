@@ -15,6 +15,7 @@ from graph import graph_obj
 from networks.qa_planner_network import QAPlannerNetwork
 from game_state import QuestionGameState
 from qa_agents.qa_agent import QAAgent
+from navigation import bounding_box_navigator
 
 import constants
 
@@ -32,8 +33,10 @@ class GraphAgent(object):
                 self.network = FreeSpaceNetwork(constants.GRU_SIZE, 1, 1)
                 self.network.create_net(add_loss=False)
         '''
+        self.nav = bounding_box_navigator.BoundingBoxNavigator()
         if game_state is None:
             self.game_state = GameState(sess=sess,env=env)
+            self.game_state.add_obstacle_func = self.nav.add_obstacle_from_step_output
             #self.game_state = GameState(sess=sess,env=env)
         else:
             self.game_state = game_state
@@ -170,6 +173,7 @@ class GraphAgent(object):
             self.times = np.zeros(2)
             self.impossible_spots = set()
             self.visited_spots = set()
+            self.nav.reset()
         else:
             #print ("")
             self.game_state.reset(event=event)

@@ -65,207 +65,148 @@ class graph_2d():
                     self.graph.add_edge((xx,yy),(xx - 1, yy), weight=curr_weight)
                 #not_seen_points.append((x,y))    
 
-        #print (self.graph.nodes[(-4,-3)]['visited'])
+    def reset(self):
+        for xx in range (self.xMin, self.xMax):
+            for yy in range (self.yMin, self.yMax):
+                self.graph.nodes[(xx,yy)]['visited']=False
+                self.graph.nodes[(xx,yy)]['seem']=False
+                self.graph.nodes[(xx,yy)]['contains_object']=False
 
-
-
-
-
-
-
-'''
-function to get all the unexplored points in the grid
-'''
-def get_unseen(g):#,xMin,xMax,yMin,yMax):
-
-    xMin_local = int(xMin)
-    yMin_local = int(zMin)
-    xMax_local = int(xMax)
-    yMax_local = int(zMax)
     '''
-    xMin = int(global xMin)
-    yMin = int(global yMin)
-    xMax = int(global xMax)
-    yMax = int(global yMax)
+    function to get all the unexplored points in the grid
     '''
-    not_seen_points = []
-    for x in range (xMin_local, xMax_local):
-        for y in range (yMin_local, yMax_local):
-            node = g.nodes[(x,y)]
-            #if not (node['visited']) and not(node['seen']) and not(node['contains_object']):
-            if not (node['visited'] or node['seen'] or node['contains_object']):
-                not_seen_points.append((x,y))
+    def get_unseen(self):#,xMin,xMax,yMin,yMax):
 
-    return not_seen_points
-
-'''
-Funcrtion to get all the visible points from a certain point in the 2D grid
-'''
-
-def points_visible_from_position(x,y,camera_field_of_view,radius,obstacles,visibility_graph):
-    number_visible_points = 0
-    #number_directions = 4
-    number_directions = 8
-    for direction in range (0,number_directions):#,number_directions*2):
-    #for direction in range (0,number_directions):
-        #print (direction)
-        #number_visible_points += len(get_visible_points(x,y,direction/2,camera_field_of_view, radius))
-        number_visible_points += len(get_visible_points(x,y,direction*45,camera_field_of_view, radius,obstacles,visibility_graph))
-
-    return number_visible_points
-
-'''
-Function to update any new explored points in the grid
-'''
-def update_seen(g, x, z, rotation,radius, camera_field_of_view,obstacles):
-    #camera_field_of_view = event.camera_field_of_view
-    #radius = event.camera_clipping_planes[1]
-    visible_points = get_visible_points(x,z,rotation,camera_field_of_view,radius,obstacles,g )
-
-    for elem in visible_points :
-        g.nodes[elem]['seen']= True
-    #pass
-
-def explore_point(x,y,graph ,agent, camera_field_of_view,obstacles):
-
-    directions = 8
-    event = agent.game_state.event
-    #pose =
-    #action = "RotateLook, rotation=45"
-    action = {'action':'RotateLook', 'rotation':45}
-    for direction in range (0,directions):
-        #agent.game_state.env.step(action)
-        agent.game_state.step(action)
+        xMin_local = int(xMin)
+        yMin_local = int(zMin)
+        xMax_local = int(xMax)
+        yMax_local = int(zMax)
         '''
-        for obj in agent.game_state.event.object_list :
-            if obj.uuid not in agent.game_state.discovered_explored :
-                print ("uuid : ", obj.uuid)
-                agent.game_state.discovered_explored[obj.uuid] = {0:obj.position}
-                agent.game_state.self.discovered_objects.append(obj.__dict__)
+        xMin = int(global xMin)
+        yMin = int(global yMin)
+        xMax = int(global xMax)
+        yMax = int(global yMax)
         '''
-        update_seen( graph,x , y ,direction*45 , 100, camera_field_of_view, obstacles )
-    #pass
-    return agent
+        not_seen_points = []
+        for x in range (xMin_local, xMax_local):
+            for y in range (yMin_local, yMax_local):
+                node = self.graph.nodes[(x,y)]
+                #if not (node['visited']) and not(node['seen']) and not(node['contains_object']):
+                if not (node['visited'] or node['seen'] or node['contains_object']):
+                    not_seen_points.append((x,y))
 
+        return not_seen_points
 
-def check_validity(x,z,q):
-    if x < xMin :
-        return False
-    elif x >= xMax :
-        return False
-    elif z < zMin :
-        return False
-    elif z >= zMax:
-        return False
-    if ((x,z)) in q:
-        return False
-    return True
-
-def flood_fill(x,y, check_validity):
-   #//here check_validity is a function that given coordinates of the point tells you whether
-   #//the point should be colored or not
-   #Queue q
-    curr_q = []
-    q = []
-    q.append((x,y))
-    curr_q.append((x,y))
-    i = 1
-    while (len(curr_q) != 0):
-        #(x1,y1) = curr_q.pop()
-        (x1,y1) = curr_q[0]
-        curr_q = curr_q[1:]
-        #print (x1,y1)
-        #color(x1,y1)
-
-        if (check_validity(x1+move_step_size,y1,q)):
-             q.append((x1+move_step_size,y1))
-             curr_q.append((x1+move_step_size,y1))
-             i += 1
-        if (check_validity(x1,y1+move_step_size,q)):
-             q.append((x1,y1+move_step_size))
-             curr_q.append((x1,y1+move_step_size))
-             i += 1
-        if (check_validity(x1-move_step_size,y1,q)):
-             q.append((x1-move_step_size,y1))
-             curr_q.append((x1-move_step_size,y1))
-             i += 1
-        if (check_validity(x1,y1-move_step_size,q)):
-             q.append((x1,y1-move_step_size))
-             curr_q.append((x1,y1-move_step_size))
-             i += 1
-        #print ("i = ", i, x1,y1, len(q))
-        #if i > 35 :
-        #    break
-    return q
-
-def get_visible_points(x,y,rotation,camera_field_of_view,radius,scene_obstacles_dict,visibility_graph):
-    step_size = constants.AGENT_STEP_SIZE
-    graph_x = x/constants.AGENT_STEP_SIZE
-    graph_z = y/constants.AGENT_STEP_SIZE
-
-    rotation_radians = rotation / 360 * (2 * math.pi)
-
-    fov = FieldOfView([x,y, 0], camera_field_of_view / 180.0 * math.pi, scene_obstacles_dict.values())
-    fov.agentH = rotation_radians
-    fov_poly = fov.getFoVPolygon(12)
-
-    #print ("poly X", fov_poly.x_list)
-    #print ("poly Y", fov_poly.y_list)
-    pt_1_angle = math.degrees(math.atan((fov_poly.x_list[1]/step_size-graph_x)/(fov_poly.y_list[1]/step_size-graph_z)))
-    pt_2_angle = math.degrees(math.atan((fov_poly.x_list[-2]/step_size-graph_x)/(fov_poly.y_list[-2]/step_size-graph_z)))
-
-    lower_angle = min(pt_1_angle,pt_2_angle)
-    higher_angle = max(pt_1_angle,pt_2_angle)
-    loop_x_min, loop_x_max = int(min(fov_poly.x_list)/constants.AGENT_STEP_SIZE), int(max(fov_poly.x_list)/constants.AGENT_STEP_SIZE)
-    loop_z_min, loop_z_max = int(min(fov_poly.y_list)/constants.AGENT_STEP_SIZE), int(max(fov_poly.y_list)/constants.AGENT_STEP_SIZE)
-
-    visible_points = []
-    dict_values =scene_obstacles_dict.values()
-    start_time = time.time()
-    for i in range(loop_x_min, loop_x_max+1 ): 
-        for j in range(loop_z_min, loop_z_max+1):
-            #goal_point = Point(i,j)
-            #if goal_point.within(poly):
-            if j==graph_z or j >= zMax or i >= xMax or i<xMin or j < zMin:
-                continue
-            current_pt_angle =  math.degrees(math.atan((i-graph_x)/(j-graph_z)))
-            #pt_2_angle =  math.degrees(math.atan((p2_x-x)/(p2_z-z)))
-            #if visibility_graph[elem]['seen'] or
-            node = visibility_graph.nodes[(i,j)]#g.nodes[(x, y)]
-            # if not (node['visited']) and not(node['seen']) and not(node['contains_object']):
-            if not (node['visited'] or node['seen'] or node['contains_object']):
-                if current_pt_angle >= lower_angle and current_pt_angle <= higher_angle :
-                    if castRay(graph_x,graph_z,i,j,dict_values):
-                        #if ()
-                        visible_points.append((i,j))
-            #else :
-            #    print ("already seen")
-    end_time = time.time()
-    time_taken = end_time- start_time
-    #print ("time taken for processing = " , end_time- start_time)
     '''
-    plt.cla()
-    plt.xlim((-7, 7))
-    plt.ylim((-7, 7))
-    plt.gca().set_xlim((-7, 7))
-    plt.gca().set_ylim((-7, 7))
-
-    plt.plot(x,y, "or")
-    #plt.plot(gx, gy, "ob")
-    fov_poly.plot("-r")
-
-    for obstacle in scene_obstacles_dict.values():
-        obstacle.plot("-g")
-
-    plt.axis("equal")
-    plt.pause(0.1)
+    Function to get all the visible points from a certain point in the 2D grid
     '''
-    return visible_points
+    def points_visible_from_position(self,x,y,camera_field_of_view,radius,obstacles):#,visibility_graph):
+        number_visible_points = 0
+        #number_directions = 4
+        number_directions = 8
+        for direction in range (0,number_directions):#,number_directions*2):
+        #for direction in range (0,number_directions):
+            #print (direction)
+            #number_visible_points += len(get_visible_points(x,y,direction/2,camera_field_of_view, radius))
+            number_visible_points += len(self.get_visible_points(x,y,direction*45,camera_field_of_view, radius,obstacles))#,visibility_graph))
 
-    #poly.plot()
+        return number_visible_points
+
+    '''
+    Function to update any new explored points in the grid
+    '''
+    def update_seen(self, x, z, rotation,radius, camera_field_of_view,obstacles):
+        #camera_field_of_view = event.camera_field_of_view
+        #radius = event.camera_clipping_planes[1]
+        visible_points = self.get_visible_points(x,z,rotation,camera_field_of_view,radius,obstacles)#,g )
+
+        for elem in visible_points :
+            self.graph.nodes[elem]['seen']= True
+        #pass
+
+    def explore_point(self,x,y,agent, camera_field_of_view,obstacles):
+
+        directions = 8
+        event = agent.game_state.event
+        action = {'action':'RotateLook', 'rotation':45}
+        for direction in range (0,directions):
+            agent.game_state.step(action)
+            self.update_seen(x , y ,direction*45 , 100, camera_field_of_view, obstacles )
+
+
+    def get_visible_points(self,x,y,rotation,camera_field_of_view,radius,scene_obstacles_dict):#,visibility_graph):
+        step_size = constants.AGENT_STEP_SIZE
+        graph_x = x/constants.AGENT_STEP_SIZE
+        graph_z = y/constants.AGENT_STEP_SIZE
+
+        rotation = (rotation+90 ) % 360
+
+        rotation_radians = rotation / 360 * (2 * math.pi)
+
+        fov = FieldOfView([x,y, 0], camera_field_of_view / 180.0 * math.pi, scene_obstacles_dict.values())
+        fov.agentH = rotation_radians
+        fov_poly = fov.getFoVPolygon(12)
+
+        '''
+        plt.cla()
+        plt.xlim((-7, 7))
+        plt.ylim((-7, 7))
+        plt.gca().set_xlim((-7, 7))
+        plt.gca().set_ylim((-7, 7))
+
+        plt.plot(x,y, "or")
+        #plt.plot(gx, gy, "ob")
+        fov_poly.plot("-r")
+
+        for obstacle in scene_obstacles_dict.values():
+            obstacle.plot("-g")
+
+        plt.axis("equal")
+        plt.pause(0.1)
+        '''
+        #print ("poly X", fov_poly.x_list)
+        #print ("poly Y", fov_poly.y_list)
+        pt_1_angle = math.degrees(math.atan((fov_poly.x_list[1]/step_size-graph_x)/(fov_poly.y_list[1]/step_size-graph_z)))
+        pt_2_angle = math.degrees(math.atan((fov_poly.x_list[-2]/step_size-graph_x)/(fov_poly.y_list[-2]/step_size-graph_z)))
+
+        lower_angle = min(pt_1_angle,pt_2_angle)
+        higher_angle = max(pt_1_angle,pt_2_angle)
+        loop_x_min, loop_x_max = int(min(fov_poly.x_list)/constants.AGENT_STEP_SIZE), int(max(fov_poly.x_list)/constants.AGENT_STEP_SIZE)
+        loop_z_min, loop_z_max = int(min(fov_poly.y_list)/constants.AGENT_STEP_SIZE), int(max(fov_poly.y_list)/constants.AGENT_STEP_SIZE)
+
+        number_ray_casted = 0
+        visible_points = []
+        dict_values =scene_obstacles_dict.values()
+        start_time = time.time()
+        for i in range(loop_x_min, loop_x_max+1 ):
+            for j in range(loop_z_min, loop_z_max+1):
+                #goal_point = Point(i,j)
+                #if goal_point.within(poly):
+                if j==graph_z or j >= zMax or i >= xMax or i<xMin or j < zMin:
+                    continue
+                current_pt_angle =  math.degrees(math.atan((i-graph_x)/(j-graph_z)))
+                #pt_2_angle =  math.degrees(math.atan((p2_x-x)/(p2_z-z)))
+                #if visibility_graph[elem]['seen'] or
+                node = self.graph.nodes[(i,j)]#g.nodes[(x, y)]
+                # if not (node['visited']) and not(node['seen']) and not(node['contains_object']):
+                if not (node['visited'] or node['seen'] or node['contains_object']):
+                    if current_pt_angle >= lower_angle and current_pt_angle <= higher_angle :
+                        number_ray_casted += 1
+                        if castRay(graph_x,graph_z,i,j,dict_values):
+                            #if ()
+                            visible_points.append((i,j))
+                #else :
+                #    print ("already seen")
+        end_time = time.time()
+        time_taken = end_time- start_time
+        #print ("time taken for processing = " , end_time- start_time)
+        return visible_points
+
+        #poly.plot()
 
 
 def castRay(graph_x, graph_y, check_x, check_y,obstacle,clr="-g"):
+    start_time = time.time()
     #p1 = Geometry.Point(float(self.agentX), float(self.agentY))
     #p2 = Geometry.Point(p1.x + maxLen * np.cos(angle), p1.y + maxLen * np.sin(angle))
     p1 = Point(graph_x,graph_y)
@@ -285,9 +226,15 @@ def castRay(graph_x, graph_y, check_x, check_y,obstacle,clr="-g"):
                 d = math.sqrt((x - p1.x) ** 2 + (y - p1.y) ** 2)
                 # plt.plot(x,y,"xg")
                 if d < minD:
+                    end_time = time.time()
+                    #time_taken = end_time - start_time
+                    #print ("time taken for single ray casting" , end_time- start_time)
                     return False
             except ValueError:
                 continue
+    end_time = time.time()
+    #time_taken = end_time - start_time
+    #print ("time taken for single ray casting" , end_time- start_time)
     return True
 
 
@@ -310,6 +257,57 @@ def intersect(a, b, c, d):
 
         return x, y
     raise ValueError
+
+def check_validity(x,z,q):
+    if x < xMin :
+        return False
+    elif x >= xMax :
+        return False
+    elif z < zMin :
+        return False
+    elif z >= zMax:
+        return False
+    if ((x,z)) in q:
+        return False
+    return True
+
+def flood_fill(x,y, check_validity):
+    #//here check_validity is a function that given coordinates of the point tells you whether
+    #//the point should be colored or not
+    #Queue q
+    curr_q = []
+    q = []
+    q.append((x,y))
+    curr_q.append((x,y))
+    i = 1
+    while (len(curr_q) != 0):
+        #(x1,y1) = curr_q.pop()
+        (x1,y1) = curr_q[0]
+        curr_q = curr_q[1:]
+        #print (x1,y1)
+        #color(x1,y1)
+
+        if (check_validity(x1+move_step_size,y1,q)):
+            q.append((x1+move_step_size,y1))
+            curr_q.append((x1+move_step_size,y1))
+            i += 1
+        if (check_validity(x1,y1+move_step_size,q)):
+            q.append((x1,y1+move_step_size))
+            curr_q.append((x1,y1+move_step_size))
+            i += 1
+        if (check_validity(x1-move_step_size,y1,q)):
+            q.append((x1-move_step_size,y1))
+            curr_q.append((x1-move_step_size,y1))
+            i += 1
+        if (check_validity(x1,y1-move_step_size,q)):
+            q.append((x1,y1-move_step_size))
+            curr_q.append((x1,y1-move_step_size))
+            i += 1
+        #print ("i = ", i, x1,y1, len(q))
+        #if i > 35 :
+        #    break
+    return q
+
 
 '''
 def get_visible_points_v2(x,y,direction,camera_field_of_view,radius):

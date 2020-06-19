@@ -18,6 +18,7 @@ logs
 question_data_dump
 *weights
 SCENE_HISTORY/*.*
+MCS_exploration/SCENE_HISTORY/*.*
 
 /.idea/
 /ff_planner/

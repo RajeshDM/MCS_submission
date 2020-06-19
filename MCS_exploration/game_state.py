@@ -97,6 +97,10 @@ class GameState(object):
         self.times = np.zeros((4, 2))
         self.discovered_explored = {} 
         self.discovered_objects = []
+        self.number_actions = 0
+        self.add_obstacle_func = None
+        self.goals_found = False
+        self.goals = []
 
     def process_frame(self, run_object_detection=False):
         self.im_count += 1
@@ -283,7 +287,9 @@ class GameState(object):
 
         else:
             # Do full reset
+            self.goals_found = False
             self.scene_name = scene_name
+            self.number_actions = 0
             #print ("Full reset - in the first time of load")
             grid_file = 'layouts/%s-layout_%s.npy' % (scene_name,str(constants.AGENT_STEP_SIZE))
             self.graph = graph_obj.Graph(grid_file, self.action_util, use_gt=use_gt)
@@ -303,6 +309,11 @@ class GameState(object):
                 self.event = event
             else :
                 self.event = game_util.reset(self.env, self.scene_name,config_filename)
+            self.goals = []
+            for key,value in self.event.goal.metadata.items():
+                if key == "target" or key == "target_1" or key == "target_2":
+                    self.goals.append(self.event.goal.metadata[key]["id"])
+            self.add_obstacle_func(self.event)
             print ("type of event 2 : ", type(self.event))
             lastActionSuccess = self.event.return_status
             #break
@@ -349,6 +360,9 @@ class GameState(object):
                 self.discovered_explored[obj.uuid] = {0:obj.position}
                 self.discovered_objects.append(obj.__dict__)
 
+        self.add_obstacle_func(self.event)
+        self.number_actions += 1
+
         self.times[2, 0] += time.time() - t_start
         self.times[2, 1] += 1
         if self.times[2, 1] % 100 == 0:
@@ -359,6 +373,14 @@ class GameState(object):
             self.process_frame()
         else :
             print ("Failed status : ",self.event.return_status )
+
+        for elem in self.discovered_explored:
+            if elem in self.goals:
+                #total_goal_objects_found[scene_type] += 1
+                self.goals.remove(elem)
+
+        if len(self.goals) == 0 :
+            self.goals_found = True
 
     def draw_state(self):
         from utils import drawing

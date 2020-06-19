@@ -31,7 +31,7 @@ class FieldOfView:
 
 		#cast on HFOV lines
 		if True:	
-			for i in np.arange(0, 1, 0.1):
+			for i in np.arange(0, 1.1, 0.1):
 				v = Geometry.Point(p1.x + maxLen*math.sin(lAngle+i*self.HVoF), p1.y + maxLen*math.cos(lAngle+i*self.HVoF))
 				theta = (np.arctan2( v.y-p1.y,  v.x-p1.x))
 				x,y = self.castRay(theta, maxLen,"-b")
