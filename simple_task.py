@@ -10,8 +10,8 @@ if __name__ == "__main__":
     # c = FrameCollector()
 
     #env = McsEnv(task="interaction_scenes", scene_type="transferral", start_scene_number=0)
-    env = McsEnv(task="interaction_scenes", scene_type="retrieval", start_scene_number=15)
-    #env = McsEnv(task="interaction_scenes", scene_type="traversal", start_scene_number=0)
+    #env = McsEnv(task="interaction_scenes", scene_type="retrieval", start_scene_number=15)
+    env = McsEnv(task="interaction_scenes", scene_type="traversal", start_scene_number=4)
     metaController = MetaController(env)
     #sequence_generator = SequenceGenerator(None,env.controller)
     result_total = 0

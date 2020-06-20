@@ -249,6 +249,8 @@ class SequenceGenerator(object):
                             max_visible = new_visible_area
 
                 min_distance = min_distance/2
+                if min_distance < 1 :
+                    break
                 #points_visible(elem)
             end_time = time.time()
 
@@ -266,8 +268,12 @@ class SequenceGenerator(object):
 
             #print("New goal selected : ", new_end_point)
 
-            number_actions = self.agent.nav.go_to_goal(new_end_point, self.agent, success_distance)
+            nav_success = self.agent.nav.go_to_goal(new_end_point, self.agent, success_distance)
             exploration_routine.remove(max_visible_position[-1])
+
+            if nav_success == False :
+                continue
+
             self.event = self.agent.game_state.event
             if self.agent.game_state.goals_found:
                 return

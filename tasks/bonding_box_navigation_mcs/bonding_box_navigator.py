@@ -25,7 +25,11 @@ class BoundingBoxNavigator:
 	
 	def get_one_step_move(self, goal, roadmap):
 
-		pathX, pathY = roadmap.planning(self.agentX, self.agentY, goal[0], goal[1])
+		try :
+			pathX, pathY = roadmap.planning(self.agentX, self.agentY, goal[0], goal[1])
+		except ValueError:
+			return None,None
+
 
 		#print(i)
 		# execute a small step along that plan by
@@ -120,6 +124,9 @@ class BoundingBoxNavigator:
 
 
 			stepSize, heading = self.get_one_step_move([gx, gy], roadmap)
+
+			if stepSize == None and heading == None :
+				return False
 
 			# needs to be replaced with turning the agent to the appropriate heading in the simulator, then stepping.
 			# the resulting agent position / heading should be used to set plan.agent* values.
