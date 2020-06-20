@@ -1,8 +1,9 @@
-from tasks.bonding_box_navigation_mcs.visibility_road_map import VisibilityRoadMap,ObstaclePolygon,IncrementalVisibilityRoadMap
+from tasks.bonding_box_navigation_mcs.visibility_road_map import ObstaclePolygon,IncrementalVisibilityRoadMap
 import random
 import math
 import matplotlib.pyplot as plt
 from tasks.bonding_box_navigation_mcs.fov import FieldOfView
+import cover_floor
 
 SHOW_ANIMATION = True
 random.seed(1)
@@ -10,7 +11,7 @@ random.seed(1)
 class BoundingBoxNavigator:
 
 	# pose is a triplet x,y,theta (heading)
-	def __init__(self, robot_radius=1, maxStep=0.25):
+	def __init__(self, robot_radius=0.1, maxStep=0.25):
 		self.agentX = None
 		self.agentY = None
 		self.agentH = None
@@ -47,12 +48,15 @@ class BoundingBoxNavigator:
 	def clear_obstacle_dict(self):
 		self.scene_obstacles_dict = {}
 
-	def initialize_scene_dict(self,scene_dict):
-		self.scene_obstacles_dict = scene_dict
+	def reset(self):
+		self.clear_obstacle_dict()
+		self.agentX = None
+		self.agentY = None
+		self.agentH = None
 
 	def add_obstacle_from_step_output(self, step_output):
 		for obj in step_output.object_list:
-			if obj.uuid not in self.scene_obstacles_dict and len(obj.dimensions) > 0:
+			if len(obj.dimensions) > 0:
 				x_list = []
 				y_list = []
 				for i in range(4, 8):
@@ -63,7 +67,7 @@ class BoundingBoxNavigator:
 				del self.scene_obstacles_dict[obj.uuid]
 
 		for obj in step_output.structural_object_list:
-			if obj.uuid not in self.scene_obstacles_dict and len(obj.dimensions) > 0:
+			if len(obj.dimensions) > 0:
 				if obj.uuid == "ceiling" or obj.uuid == "floor":
 					continue
 				x_list = []
@@ -73,13 +77,16 @@ class BoundingBoxNavigator:
 					y_list.append(obj.dimensions[i]['z'])
 				self.scene_obstacles_dict[obj.uuid] = ObstaclePolygon(x_list, y_list)
 
-	def go_to_goal(self, nav_env, goal, success_distance, epsd_collector=None, frame_collector=None):
-		self.agentX = nav_env.step_output.position['x']
-		self.agentY = nav_env.step_output.position['z']
-		self.agentH = nav_env.step_output.rotation / 360 * (2 * math.pi)
+	#def go_to_goal(self, nav_env, goal, success_distance, epsd_collector=None, frame_collector=None):
+
+	def go_to_goal(self, goal_pose, agent, success_distance, SHOW_ANIMATION):
+
+		self.agentX = agent.game_state.event.position['x']
+		self.agentY = agent.game_state.event.position['z']
+		self.agentH = agent.game_state.event.rotation / 360 * (2 * math.pi)
 		self.epsilon = success_distance
 
-		gx, gy = goal[0], goal[2]
+		gx, gy = goal_pose[0], goal_pose[1]
 		sx, sy = self.agentX, self.agentY
 
 		while True:
@@ -97,8 +104,6 @@ class BoundingBoxNavigator:
 			fov.agentH = self.agentH
 			poly = fov.getFoVPolygon(100)
 
-			#SHOW_ANIMATION = F
-
 			if SHOW_ANIMATION:
 				plt.cla()
 				plt.xlim((-7, 7))
@@ -106,15 +111,17 @@ class BoundingBoxNavigator:
 				plt.gca().set_xlim((-7, 7))
 				plt.gca().set_ylim((-7, 7))
 
-				plt.plot(self.agentX, self.agentY, "or")
-				plt.plot(gx, gy, "ob")
+				# plt.plot(self.agentX, self.agentY, "or")
+				circle = plt.Circle((self.agentX, self.agentY), radius=self.radius, color='r')
+				plt.gca().add_artist(circle)
+				plt.plot(gx, gy, "x")
 				poly.plot("-r")
 
 				for obstacle in self.scene_obstacles_dict.values():
 					obstacle.plot("-g")
 
 				plt.axis("equal")
-				plt.pause(0.001)
+				plt.pause(0.1)
 
 
 			stepSize, heading = self.get_one_step_move([gx, gy], roadmap)
@@ -122,31 +129,29 @@ class BoundingBoxNavigator:
 			# needs to be replaced with turning the agent to the appropriate heading in the simulator, then stepping.
 			# the resulting agent position / heading should be used to set plan.agent* values.
 
-			rotation_degree = heading / (2 * math.pi) * 360 - nav_env.step_output.rotation
-			nav_env.env.step(action="RotateLook", rotation=rotation_degree)
+			rotation_degree = heading / (2 * math.pi) * 360 - agent.game_state.event.rotation
+			action={'action':"RotateLook",'rotation':rotation_degree}
+			agent.step(action)
+			rotation = agent.game_state.event.rotation
+			self.agentX = agent.game_state.event.position['x']
+			self.agentY = agent.game_state.event.position['z']
+			self.agentH = rotation / 360 * (2 * math.pi)
+			cover_floor.update_seen(self.agentX, self.agentY, agent.game_state, rotation, 42.5,
+									self.scene_obstacles_dict.values())
 
-			if abs(rotation_degree) > 1e-2:
-				if 360 - abs(rotation_degree) > 1e-2:
-					continue
+			#if abs(rotation_degree) > 1e-2:
+			#	if 360 - abs(rotation_degree) > 1e-2:
+			#		continue
 
-			agentX_exp = self.agentX + stepSize * math.sin(self.agentH)
-			agentY_exp = self.agentY + stepSize * math.cos(self.agentH)
-			# if abs(agentX_exp - nav_env.step_output.position['x']) > 1e-2:
-			# 	print("Collision happened, re-update agent's position")
-			# elif abs(agentY_exp - nav_env.step_output.position['z']) > 1e-2:
-			# 	print("Collision happened, re-update agent's position")
-			self.agentX = nav_env.step_output.position['x']
-			self.agentY = nav_env.step_output.position['z']
-			self.agentH = nav_env.step_output.rotation / 360 * (2 * math.pi)
-
-			nav_env.env.step(action="MoveAhead", amount=0.5)
-
-			# # any new obstacles that were observed during the step should be added to the planner
-			# for i in range(len(obstacles)):
-			# 	if not visible[i] and obstacles[i].minDistanceToVertex(self.agentX, self.agentY) < 30:
-			# 		self.addObstacle(obstacles[i])
-			# 		visible[i] = True
-
+			#agent.game_state.step(action="MoveAhead", amount=0.5)
+			action={'action':"MoveAhead", 'amount':0.5}
+			agent.step(action)#={'action':"RotateLook",rotation=rotation_degree}
+			rotation = agent.game_state.event.rotation
+			self.agentX = agent.game_state.event.position['x']
+			self.agentY = agent.game_state.event.position['z']
+			self.agentH = rotation / 360 * (2 * math.pi)
+			cover_floor.update_seen(self.agentX, self.agentY, agent.game_state, rotation, 42.5,
+									self.scene_obstacles_dict.values())
 
 
 		return True

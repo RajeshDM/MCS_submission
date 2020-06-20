@@ -12,6 +12,7 @@ import cover_floor
 from cover_floor import *
 import math
 import time
+from shapely.geometry import Point, Polygon
 
 #from navigation.bounding_box_navigator import BoundingBoxNavigator, SHOW_ANIMATION
 #from navigation.visibility_road_map import ObstaclePolygon
@@ -71,7 +72,7 @@ class SequenceGenerator(object):
         print ("before explore point ", len(unexplored))
         #print (unexplored)
         #return
-        self.graph.explore_point(self.event.position['x'],self.event.position['z'],self.agent , 42.5, self.agent.nav.scene_obstacles_dict)
+        #self.graph.explore_point(self.event.position['x'],self.event.position['z'],self.agent , 42.5, self.agent.nav.scene_obstacles_dict)
 
         unexplored = self.graph.get_unseen()
         print ("after explore point", len(unexplored))
@@ -90,6 +91,7 @@ class SequenceGenerator(object):
             start_time = time.time()
             print (exploration_routine)
             min_distance = 20
+            '''
             while (len(max_visible_position) == 0):
                 for elem in exploration_routine:
                     #number_visible_points = points_visible_from_position(exploration_routine[1][0],exploration_routine[1][1], self.event.camera_field_of_view,self.event.camera_clipping_planes[1] )
@@ -106,6 +108,8 @@ class SequenceGenerator(object):
 
                     min_distance = min_distance/2
                     #points_visible(elem)
+            '''
+            max_visible_position.append((7,-7))
             end_time = time.time()
             print (max_visible_position)
             print ("time taken to select next position" , end_time-start_time)
@@ -178,6 +182,99 @@ class SequenceGenerator(object):
             
         return number_actions
 
+    def explore_scene_view(self, event, config_filename=None):
+        number_actions = 0
+        success_distance = 0.3
+        self.scene_name = 'transferral_data'
+        # print('New episode. Scene %s' % self.scene_name)
+        self.agent.reset(self.scene_name, config_filename=config_filename, event=event)
+
+        self.event = self.agent.game_state.event
+
+        cover_floor.update_seen(self.event.position['x'],self.event.position['z'],self.agent.game_state,self.event.rotation,self.event.camera_field_of_view,self.agent.nav.scene_obstacles_dict.values())
+
+        cover_floor.explore_point(self.event.position['x'],self.event.position['z'],self.agent,self.agent.nav.scene_obstacles_dict.values())
+        exploration_routine = cover_floor.flood_fill(0,0, cover_floor.check_validity)
+
+        pose = game_util.get_pose(self.game_state.event)[:3]
+
+        x_list, y_list = [],[]
+
+        for key,value in self.agent.nav.scene_obstacles_dict.items():
+            x_list.append(min(value.x_list))
+            x_list.append(max(value.x_list))
+            y_list.append(min(value.y_list))
+            y_list.append(max(value.y_list))
+
+        #print ("bounds", min(x_list),max(x_list),min(y_list),max(y_list))
+        x_min = min(x_list)
+        x_max = max(x_list)
+        y_min = min(y_list)
+        y_max = max(y_list)
+
+        #outer_poly = Polygon(zip([x_min,x_min,x_max,x_max],[y_min,y_max,y_min,y_max]))
+        #outer_poly_new = outer_poly.difference(self.agent.game_state.world_poly)
+        #print (value.x_list,value.y_list)
+        #print (outer_poly_new.area)
+
+        overall_area = abs(x_max-x_min) * abs (y_max-y_min)
+        print (self.agent.game_state.world_poly.area)
+        #return
+
+        #z = 0
+        while overall_area*1.1 >  self.agent.game_state.world_poly.area :
+            points_checked = 0
+            #z+=1
+            max_visible = 0
+            max_visible_position = []
+            processed_points = {}
+            start_time = time.time()
+            #print(exploration_routine)
+            min_distance = 20
+            while (len(max_visible_position) == 0):
+                for elem in exploration_routine:
+                    distance_to_point = math.sqrt((pose[0] - elem[0])**2 + (pose[1]-elem[1])**2)
+
+                    if distance_to_point > min_distance and elem not in processed_points:
+                        points_checked += 1
+                        for obstacle_key, obstacle in self.agent.nav.scene_obstacles_dict.items():
+                            if not obstacle.contains_goal(elem):
+                                continue
+
+                        new_visible_area = cover_floor.get_point_all_new_coverage(elem[0]*constants.AGENT_STEP_SIZE, elem[1]*constants.AGENT_STEP_SIZE, self.agent.game_state,self.agent.game_state.event.rotation,self.agent.nav.scene_obstacles_dict.values() )
+                        processed_points[elem] = new_visible_area
+                        #if max_visible < number_visible_points/math.sqrt((pose[0]-elem[0])**2 + (pose[1]-elem[1])**2):
+                        if max_visible < new_visible_area: #and abs(max_visible_points[-1][0] - elem[0]) > 2 and  :
+                            max_visible_position.append(elem)
+                            max_visible = new_visible_area
+
+                min_distance = min_distance/2
+                #points_visible(elem)
+            end_time = time.time()
+
+            #max_visible_position = [(7,-7)]
+            print(max_visible_position)
+            time_taken = end_time-start_time
+            #print("time taken to select next position", end_time - start_time)
+            #print ("points searched with area overlap", points_checked)
+            if len(max_visible_position) == 0:
+                return
+            exploration_routine.remove(max_visible_position[-1])
+            new_end_point = [0] * 3
+            new_end_point[0] = max_visible_position[-1][0] *constants.AGENT_STEP_SIZE
+            new_end_point[1] = max_visible_position[-1][1] *constants.AGENT_STEP_SIZE
+            new_end_point[2] = pose[2]
+
+            #print("New goal selected : ", new_end_point)
+
+            number_actions = self.agent.nav.go_to_goal(new_end_point, self.agent, success_distance)
+            self.event = self.agent.game_state.event
+            if self.agent.game_state.goals_found:
+                return
+            cover_floor.explore_point(self.event.position['x'], self.event.position['z'], self.agent,
+                                      self.agent.nav.scene_obstacles_dict.values())
+            if self.agent.game_state.goals_found:
+                return
 
     def explore_object(self, object_id_to_search):
         uuid = object_id_to_search

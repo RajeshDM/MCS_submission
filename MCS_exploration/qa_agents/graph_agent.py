@@ -152,6 +152,7 @@ class GraphAgent(object):
 
     def reset(self, scene_name=None, seed=None, config_filename="",event=None):
         if scene_name is not None:
+            self.nav.reset()
             if self.game_state.env is not None and type(self.game_state) == GameState:
                 self.game_state.reset(scene_name, use_gt=False, seed=seed,config_filename=config_filename,event=event)
             self.gt_graph = graph_obj.Graph('layouts/%s-layout_%s.npy' % (scene_name,str(constants.AGENT_STEP_SIZE)), self.action_util, use_gt=True)
@@ -173,7 +174,6 @@ class GraphAgent(object):
             self.times = np.zeros(2)
             self.impossible_spots = set()
             self.visited_spots = set()
-            self.nav.reset()
         else:
             #print ("")
             self.game_state.reset(event=event)

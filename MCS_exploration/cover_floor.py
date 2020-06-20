@@ -5,6 +5,7 @@ import math
 import time 
 from shapely.geometry import Point, Polygon  
 from navigation.fov import FieldOfView
+import  numpy as np
 import matplotlib.pyplot as plt
 
 testing = 0
@@ -13,7 +14,7 @@ testing = 0
 if testing != 1 :
     #AGENT_STEP_SIZE = 0
     max_abs = 5/constants.AGENT_STEP_SIZE
-    move_step_size = 7
+    move_step_size = 6
 else :
     move_step_size = 1
     max_abs =1/constants.AGENT_STEP_SIZE
@@ -133,6 +134,8 @@ class graph_2d():
             agent.game_state.step(action)
             self.update_seen(x , y ,direction*45 , 100, camera_field_of_view, obstacles )
 
+    #def get_point_coverage(self):
+
 
     def get_visible_points(self,x,y,rotation,camera_field_of_view,radius,scene_obstacles_dict):#,visibility_graph):
         step_size = constants.AGENT_STEP_SIZE
@@ -176,6 +179,8 @@ class graph_2d():
 
         number_ray_casted = 0
         visible_points = []
+        possible_points_x = []
+        possible_points_y = []
         dict_values =scene_obstacles_dict.values()
         start_time = time.time()
         for i in range(loop_x_min, loop_x_max+1 ):
@@ -193,10 +198,18 @@ class graph_2d():
                     if current_pt_angle >= lower_angle and current_pt_angle <= higher_angle :
                         number_ray_casted += 1
                         if castRay(graph_x,graph_z,i,j,dict_values):
-                            #if ()
-                            visible_points.append((i,j))
+                           visible_points.append((i, j))
+                        #if ray_tracing_mult():
+                        #possible_points_x.append(i)
+                        #possible_points_y.append(j)
+                        #if ()
                 #else :
                 #    print ("already seen")
+        #if (len(possible_points_x) >= 0):
+        #    fov_ray_poly = [[x,y] for x,y in zip(fov_poly.x_list,fov_poly.y_list)]
+        #    visible_points = ray_tracing_mult(possible_points_x,possible_points_y,fov_ray_poly)
+
+
         end_time = time.time()
         time_taken = end_time- start_time
         #print ("time taken for processing = " , end_time- start_time)
@@ -204,6 +217,29 @@ class graph_2d():
 
         #poly.plot()
 
+def ray_tracing_numpy(x,y,poly):
+    n = len(poly)
+    inside = np.zeros(len(x),np.bool_)
+    p2x = 0.0
+    p2y = 0.0
+    xints = 0.0
+    p1x,p1y = poly[0]
+    for i in range(n+1):
+        p2x,p2y = poly[i % n]
+        idx = np.nonzero((y > min(p1y,p2y)) & (y <= max(p1y,p2y)) & (x <= max(p1x,p2x)))[0]
+        if p1y != p2y:
+            xints = (y[idx]-p1y)*(p2x-p1x)/(p2y-p1y)+p1x
+        if p1x == p2x:
+            inside[idx] = ~inside[idx]
+        else:
+            idxx = idx[x[idx] <= xints]
+            inside[idxx] = ~inside[idxx]
+
+        p1x,p1y = p2x,p2y
+    return inside
+
+def ray_tracing_mult(x,y,poly):
+    return [ray_tracing_numpy(xi, yi, poly) for xi,yi in zip(x,y)]
 
 def castRay(graph_x, graph_y, check_x, check_y,obstacle,clr="-g"):
     start_time = time.time()
@@ -307,6 +343,114 @@ def flood_fill(x,y, check_validity):
         #if i > 35 :
         #    break
     return q
+
+
+def explore_point(x,y, agent,obstacles):
+    directions = 8
+    event = agent.game_state.event
+    camera_field_of_view = agent.game_state.event.camera_field_of_view
+    action = {'action':'RotateLook', 'rotation':45}
+    for direction in range (0,directions):
+        agent.game_state.step(action)
+        rotation = agent.game_state.event.rotation
+        update_seen(x , y ,agent.game_state,rotation,camera_field_of_view, obstacles )
+        if agent.game_state.goals_found == True :
+            return
+
+
+def update_seen(x,y,game_state,rotation,camera_field_of_view,obstacles):
+    fov = FieldOfView([x, y, rotation], camera_field_of_view / 180.0 * math.pi, obstacles)
+    poly = fov.getFoVPolygon(17)
+
+    view = Polygon(zip(poly.x_list, poly.y_list))
+
+    game_state.world_poly = game_state.world_poly.union(view)
+    world = game_state.world_poly
+
+    #obstacles_polygons = [ObstaclePolygon(obstacle) for obstacle in obstacles ]
+
+    show_animation = False
+    if show_animation:
+        plt.cla()
+        plt.plot(x, y, "or")
+        # plt.plot(gx, gy, "ob")
+        # poly.plot("-r")
+
+        if world.geom_type == 'MultiPolygon':
+            for i in range(len(world)):
+                pts = world[i].exterior.coords
+                plt.fill([p[0] for p in pts], [p[1] for p in pts], "-b")
+        else:
+            pts = world.exterior.coords
+            plt.fill([p[0] for p in pts], [p[1] for p in pts], "-b")
+
+        #for i in range(len(obstacles)):
+        #    obstacles[i].plot("-k")
+        for obstacle in obstacles:
+            obstacle.plot("-g")
+
+        plt.axis("equal")
+        plt.pause(1)
+
+
+def get_point_all_new_coverage(x,y,game_state,rotation,obstacles):
+    return get_point_new_coverage(x,y,game_state,rotation,360,obstacles)
+
+def get_point_new_coverage(x,y,game_state, rotation,camera_field_of_view,obstacles):
+    fov_checker = FieldOfView([x,y,rotation],camera_field_of_view/180.0*math.pi, obstacles)
+
+    checkPoly = fov_checker.getFoVPolygon(17)
+
+    intersection_free_points = [[],[]]
+
+    for x,y in zip(checkPoly.x_list,checkPoly.y_list) :
+        if len(intersection_free_points[0]) != 0:
+            if not ( abs(x - intersection_free_points[0][-1]) < 0.001 and abs(y-intersection_free_points[1][-1]) < 0.001):
+                intersection_free_points[0].append(x)
+                intersection_free_points[1].append(y)
+        else :
+            intersection_free_points[0].append(x)
+            intersection_free_points[1].append(y)
+
+    #newPoly = Polygon(zip(checkPoly.x_list, checkPoly.y_list))
+    newPoly = Polygon(zip(intersection_free_points[0],intersection_free_points[1]))
+    newPoly = newPoly.difference(game_state.world_poly.buffer(0))
+
+    world = game_state.world_poly
+
+    show_animation = False
+
+    if show_animation:
+        plt.cla()
+        plt.plot(x, y, "or")
+        # plt.plot(gx, gy, "ob")
+        # poly.plot("-r")
+
+        if world.geom_type == 'MultiPolygon':
+            for i in range(len(world)):
+                pts = world[i].exterior.coords
+                plt.fill([p[0] for p in pts], [p[1] for p in pts], "-b")
+        else:
+            pts = world.exterior.coords
+            plt.fill([p[0] for p in pts], [p[1] for p in pts], "-b")
+
+        if newPoly.geom_type == 'MultiPolygon':
+            for i in range(len(newPoly)):
+                pts = newPoly[i].exterior.coords
+                plt.fill([p[0] for p in pts], [p[1] for p in pts], "-g")
+        else:
+            pts = newPoly.exterior.coords
+            plt.fill([p[0] for p in pts], [p[1] for p in pts], "-g")
+
+        #for i in range(len(obstacles)):
+        #    obstacles[i].plot("-k")
+        for obstacle in obstacles:
+            obstacle.plot("-g")
+
+        plt.axis("equal")
+        plt.pause(1)
+
+    return newPoly.area
 
 
 '''

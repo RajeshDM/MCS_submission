@@ -6,6 +6,7 @@ import constants
 #from cover_floor import update_seen,get_visible_points,get_visible_points
 from navigation.fov import FieldOfView
 from utils import game_util
+import cover_floor
 
 SHOW_ANIMATION = True
 random.seed(1)
@@ -13,7 +14,7 @@ random.seed(1)
 class BoundingBoxNavigator:
 
 	# pose is a triplet x,y,theta (heading)
-	def __init__(self, robot_radius=1, maxStep=0.25):
+	def __init__(self, robot_radius=5, maxStep=0.25):
 		self.agentX = None
 		self.agentY = None
 		self.agentH = None
@@ -84,9 +85,9 @@ class BoundingBoxNavigator:
 					y_list.append(obj.dimensions[i]['z'])
 				self.scene_obstacles_dict[obj.uuid] = ObstaclePolygon(x_list, y_list)
 
-	def go_to_goal(self,goal_pose,agent,success_distance,graph_obj,SHOW_ANIMATION):
+	def go_to_goal(self,goal_pose,agent,success_distance):
 		#print ("current pose in go to goal", current_pose[1])
-		goal_pose[0],goal_pose[1] = goal_pose[0]*constants.AGENT_STEP_SIZE,goal_pose[1]*constants.AGENT_STEP_SIZE
+		#goal_pose[0],goal_pose[1] = goal_pose[0]*constants.AGENT_STEP_SIZE,goal_pose[1]*constants.AGENT_STEP_SIZE
 		#goal_pose[0],goal_pose[1] = goal_pose[0]*5,goal_pose[1]*5
 		gx, gy = goal_pose[0], goal_pose[1]
 		sx, sy = agent.game_state.event.position['x'] ,agent.game_state.event.position['z']
@@ -94,7 +95,7 @@ class BoundingBoxNavigator:
 		self.agentH = agent.game_state.event.rotation / 360 * (2 * math.pi)
 		self.epsilon = success_distance
 		actions = 0 
-		print ("beginning of go to goal", gx,gy , self.agentX, self.agentY,sx,sy)
+		#print ("beginning of go to goal", gx,gy , self.agentX, self.agentY,sx,sy)
 
 		while True:
 			dis_to_goal = math.sqrt((self.agentX-gx)**2 + (self.agentY-gy)**2)
@@ -110,12 +111,13 @@ class BoundingBoxNavigator:
 				#	roadmap.addObstacle(obstacle)
 
 			#fov = FieldOfView([sx, sy, 0], 42.5 / 180.0 * math.pi, self.scene_obstacles_dict.values())
-			fov = FieldOfView([self.agentX, self.agentY, 0], 42.5 / 180.0 * math.pi, self.scene_obstacles_dict.values())
+			fov = FieldOfView([sx,sy, 0], 42.5 / 180.0 * math.pi, self.scene_obstacles_dict.values())
 			fov.agentX = self.agentX
 			fov.agentY = self.agentY
 			fov.agentH = self.agentH
 			poly = fov.getFoVPolygon(100)
 
+			SHOW_ANIMATION = False
 
 			if SHOW_ANIMATION:
 				plt.cla()
@@ -132,7 +134,7 @@ class BoundingBoxNavigator:
 					obstacle.plot("-g")
 
 				plt.axis("equal")
-				plt.pause(0.1)
+				plt.pause(0.001)
 
 
 			stepSize, heading = self.get_one_step_move([gx, gy], roadmap)
@@ -141,8 +143,8 @@ class BoundingBoxNavigator:
 			# the resulting agent position / heading should be used to set plan.agent* values.
 
 			rotation_degree = heading / (2 * math.pi) * 360 - agent.game_state.event.rotation
-			print("heading , rotation",heading,  rotation_degree)
-            
+			#print("heading , rotation , stepsize",heading,  rotation_degree,stepSize)
+
 
 			#print("all objects found until now and stored" ,self.scene_obstacles_dict )
 			#nav_env.env.step(action="RotateLook", rotation=rotation_degree)
@@ -154,8 +156,8 @@ class BoundingBoxNavigator:
 				#rotation = agent.game_state.event.rotation / 360 * (2 * math.pi)
 				rotation = agent.game_state.event.rotation
 				pose = game_util.get_pose(agent.game_state.event)[:3]  
-				graph_obj.update_seen(self.agentX,self.agentY,rotation ,100,42.5,self.scene_obstacles_dict )
-				print("Visible points",graph_obj.get_visible_points(self.agentX,self.agentY ,rotation ,42.5, 25 ,self.scene_obstacles_dict))
+				cover_floor.update_seen(self.agentX,self.agentY, agent.game_state,rotation ,42.5,self.scene_obstacles_dict.values() )
+				#print("Visible points",get_visible_points(self.agentX,self.agentY ,rotation ,42.5,self.scene_obstacles_dict.values()))
 			else:
 				continue
 
@@ -172,11 +174,11 @@ class BoundingBoxNavigator:
 			self.agentH = agent.game_state.event.rotation / 360 * (2 * math.pi)
 			#nav_env.env.step(action="MoveAhead", amount=0.5)
 
-			if abs(rotation_degree) > 1:
-				if 360 - abs(rotation_degree) > 1:
-					#print ("in the continue", abs(rotation_degree), 360 - abs(rotation_degree))
-					continue
-			action={'action':"MoveAhead", 'amount':stepSize}
+			#if abs(rotation_degree) > 0.01:
+			#	if 360 - abs(rotation_degree) > 0.01:
+			#		print ("in the continue", abs(rotation_degree), 360 - abs(rotation_degree))
+			#		continue
+			action={'action':"MoveAhead", 'amount':0.5}
 			agent.step(action)#={'action':"RotateLook",rotation=rotation_degree}
 			self.agentX = agent.game_state.event.position['x']
 			self.agentY = agent.game_state.event.position['z']
@@ -185,7 +187,8 @@ class BoundingBoxNavigator:
 				actions += 1 
 				pose = game_util.get_pose(agent.game_state.event)[:3]
 				rotation = agent.game_state.event.rotation
-				graph_obj.update_seen(self.agentX,self.agentY,rotation ,100,42.5,self.scene_obstacles_dict )
+				#graph_obj.update_seen(self.agentX,self.agentY,rotation ,100,42.5,self.scene_obstacles_dict )
+				cover_floor.update_seen(self.agentX,self.agentY, agent.game_state,rotation ,42.5,self.scene_obstacles_dict.values() )
 				#update_seen(visibility_graph,pose[0],pose[1],pose[2] ,agent.game_state.event)
 			else:
 				continue

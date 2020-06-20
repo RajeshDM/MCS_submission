@@ -20,6 +20,10 @@ from darknet_object_detection import detector
 from machine_common_sense import MCS_Step_Output
 from machine_common_sense import MCS_Object
 from machine_common_sense import MCS_Util
+from navigation import fov#FieldOfView
+import cover_floor
+from cover_floor import *
+import shapely.geometry.polygon as sp
 #from mcs_step_output import MCS_Step_Output
 from machine_common_sense import MCS
 import json
@@ -101,6 +105,7 @@ class GameState(object):
         self.add_obstacle_func = None
         self.goals_found = False
         self.goals = []
+        self.world_poly = None
 
     def process_frame(self, run_object_detection=False):
         self.im_count += 1
@@ -287,6 +292,8 @@ class GameState(object):
 
         else:
             # Do full reset
+            #self.world_poly = fov.FieldOfView([0, 0, 0], 0, [])
+            self.world_poly = sp.Polygon()
             self.goals_found = False
             self.scene_name = scene_name
             self.number_actions = 0
@@ -313,6 +320,12 @@ class GameState(object):
             for key,value in self.event.goal.metadata.items():
                 if key == "target" or key == "target_1" or key == "target_2":
                     self.goals.append(self.event.goal.metadata[key]["id"])
+
+            for obj in self.event.object_list:
+                if obj.uuid not in self.discovered_explored:
+                    print("uuid : ", obj.uuid)
+                    self.discovered_explored[obj.uuid] = {0: obj.position}
+                    self.discovered_objects.append(obj.__dict__)
             self.add_obstacle_func(self.event)
             print ("type of event 2 : ", type(self.event))
             lastActionSuccess = self.event.return_status
@@ -340,8 +353,8 @@ class GameState(object):
         elif action['action'] == 'RotateLeft':
             action = "RotateLook, rotation=-90" 
         elif action['action'] == 'MoveAhead':
-            #action =  'MoveAhead, amount=%d' % action['amount']
-            action =  'MoveAhead, amount=0.5'
+            action =  'MoveAhead, amount=%d' % action['amount']
+            #action =  'MoveAhead, amount=0.5'
             #action =  'MoveAhead, amount=0.2'
         elif action['action'] == 'RotateLook':
             action = "RotateLook, rotation=%d" % action['rotation'] 

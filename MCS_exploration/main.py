@@ -34,11 +34,17 @@ def create_scene_numbers(min_scene_number , max_scene_number):
     return scene_numbers
 
 def explore_scene(sequence_generator,event, scene_type=None, scene_number=None):
+    '''
     if scene_type != None and scene_number != None :
         sequence_generator.explore_3d_scene(event, str(scene_type)+ scene_number + ".json")
     else :
         sequence_generator.explore_3d_scene(event)
+    '''
 
+    if scene_type != None and scene_number != None :
+        sequence_generator.explore_scene_view(event, str(scene_type)+ scene_number + ".json")
+    else :
+        sequence_generator.explore_scene_view(event)
 
     config_data = {}
     
@@ -75,15 +81,15 @@ def explore_all_scenes():
     all_scene_types = ['retrieval_goal-', 'traversal_goal-', 'transferral_goal-']
     #scene_types = ['retrieval_goal-', 'traversal_goal-', 'transferral_goal-']
     #scene_types = ['retrieval_goal-', 'traversal_goal-']#, 'transferral_goal-']
-    #scene_types = ['transferral_goal-']
+    scene_types = ['transferral_goal-']
     #scene_types = ['traversal_goal-']
-    scene_types = ['retrieval_goal-']
+    #scene_types = ['retrieval_goal-']
 
 
     #scene_numbers = ['0933','0934','0935']
     #scene_numbers = ['0058']#,'0934','0935']
-    #scene_numbers = ['0002']
-    scene_numbers = create_scene_numbers('0100', '0201')
+    scene_numbers = ['0001']
+    #scene_numbers = create_scene_numbers('0100', '0201')
     print (scene_numbers)
     #exit()
     #scene_number = [i]
