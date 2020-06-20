@@ -1,0 +1,2 @@
+scene,0,reward,1
+scene,1,reward,1

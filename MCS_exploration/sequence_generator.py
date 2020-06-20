@@ -279,7 +279,8 @@ class SequenceGenerator(object):
                 return
             cover_floor.explore_point(self.event.position['x'], self.event.position['z'], self.agent,
                                       self.agent.nav.scene_obstacles_dict.values())
-            if self.agent.game_state.goals_found or self.agent.game_state.number_actions > 500:
+            if self.agent.game_state.goals_found or self.agent.game_state.number_actions > 500 or len(exploration_routine) == 0:
+
                 return
 
     def explore_object(self, object_id_to_search):
