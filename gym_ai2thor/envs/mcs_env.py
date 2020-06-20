@@ -24,7 +24,7 @@ class McsEnv:
         '''
 
         if platform.system() == "Linux":
-            app = "/home/rajesh/rajesh/mcs_data/MCS-AI2-THOR-Unity-App-v0.0.6.x86_64" 
+            app = "/home/rajesh/rajesh/mcs_data/MCS-AI2-THOR-Unity-App-v0.0.10.x86_64"
         elif platform.system() == "Darwin":
             app = "/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/MacOS/MCSai2thor"
         else:

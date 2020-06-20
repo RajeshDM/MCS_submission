@@ -1,4 +1,4 @@
-from tasks.bonding_box_navigation_mcs.visibility_road_map import VisibilityRoadMap,ObstaclePolygon,IncrementalVisibilityRoadMap
+from tasks.bonding_box_navigation_mcs.visibility_road_map import ObstaclePolygon,IncrementalVisibilityRoadMap
 import random
 import math
 import matplotlib.pyplot as plt
@@ -10,7 +10,7 @@ random.seed(1)
 class BoundingBoxNavigator:
 
 	# pose is a triplet x,y,theta (heading)
-	def __init__(self, robot_radius=1, maxStep=0.25):
+	def __init__(self, robot_radius=0.1, maxStep=0.25):
 		self.agentX = None
 		self.agentY = None
 		self.agentH = None
@@ -52,7 +52,7 @@ class BoundingBoxNavigator:
 
 	def add_obstacle_from_step_output(self, step_output):
 		for obj in step_output.object_list:
-			if obj.uuid not in self.scene_obstacles_dict and len(obj.dimensions) > 0:
+			if len(obj.dimensions) > 0:
 				x_list = []
 				y_list = []
 				for i in range(4, 8):
@@ -63,7 +63,7 @@ class BoundingBoxNavigator:
 				del self.scene_obstacles_dict[obj.uuid]
 
 		for obj in step_output.structural_object_list:
-			if obj.uuid not in self.scene_obstacles_dict and len(obj.dimensions) > 0:
+			if len(obj.dimensions) > 0:
 				if obj.uuid == "ceiling" or obj.uuid == "floor":
 					continue
 				x_list = []
@@ -97,7 +97,7 @@ class BoundingBoxNavigator:
 			fov.agentH = self.agentH
 			poly = fov.getFoVPolygon(100)
 
-			#SHOW_ANIMATION = F
+			SHOW_ANIMATION = False
 
 			if SHOW_ANIMATION:
 				plt.cla()
@@ -106,15 +106,17 @@ class BoundingBoxNavigator:
 				plt.gca().set_xlim((-7, 7))
 				plt.gca().set_ylim((-7, 7))
 
-				plt.plot(self.agentX, self.agentY, "or")
-				plt.plot(gx, gy, "ob")
+				# plt.plot(self.agentX, self.agentY, "or")
+				circle = plt.Circle((self.agentX, self.agentY), radius=self.radius, color='r')
+				plt.gca().add_artist(circle)
+				plt.plot(gx, gy, "x")
 				poly.plot("-r")
 
 				for obstacle in self.scene_obstacles_dict.values():
 					obstacle.plot("-g")
 
 				plt.axis("equal")
-				plt.pause(0.001)
+				plt.pause(0.1)
 
 
 			stepSize, heading = self.get_one_step_move([gx, gy], roadmap)
@@ -124,29 +126,18 @@ class BoundingBoxNavigator:
 
 			rotation_degree = heading / (2 * math.pi) * 360 - nav_env.step_output.rotation
 			nav_env.env.step(action="RotateLook", rotation=rotation_degree)
+			self.agentX = nav_env.step_output.position['x']
+			self.agentY = nav_env.step_output.position['z']
+			self.agentH = nav_env.step_output.rotation / 360 * (2 * math.pi)
 
 			if abs(rotation_degree) > 1e-2:
 				if 360 - abs(rotation_degree) > 1e-2:
 					continue
 
-			agentX_exp = self.agentX + stepSize * math.sin(self.agentH)
-			agentY_exp = self.agentY + stepSize * math.cos(self.agentH)
-			# if abs(agentX_exp - nav_env.step_output.position['x']) > 1e-2:
-			# 	print("Collision happened, re-update agent's position")
-			# elif abs(agentY_exp - nav_env.step_output.position['z']) > 1e-2:
-			# 	print("Collision happened, re-update agent's position")
+			nav_env.env.step(action="MoveAhead", amount=0.5)
 			self.agentX = nav_env.step_output.position['x']
 			self.agentY = nav_env.step_output.position['z']
 			self.agentH = nav_env.step_output.rotation / 360 * (2 * math.pi)
-
-			nav_env.env.step(action="MoveAhead", amount=0.5)
-
-			# # any new obstacles that were observed during the step should be added to the planner
-			# for i in range(len(obstacles)):
-			# 	if not visible[i] and obstacles[i].minDistanceToVertex(self.agentX, self.agentY) < 30:
-			# 		self.addObstacle(obstacles[i])
-			# 		visible[i] = True
-
 
 
 		return True

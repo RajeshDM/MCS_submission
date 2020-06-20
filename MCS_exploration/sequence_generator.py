@@ -222,7 +222,7 @@ class SequenceGenerator(object):
         #return
 
         #z = 0
-        while overall_area*1.1 >  self.agent.game_state.world_poly.area :
+        while overall_area >  self.agent.game_state.world_poly.area :
             points_checked = 0
             #z+=1
             max_visible = 0
@@ -253,13 +253,12 @@ class SequenceGenerator(object):
             end_time = time.time()
 
             #max_visible_position = [(7,-7)]
-            print(max_visible_position)
+            #print(max_visible_position)
             time_taken = end_time-start_time
             #print("time taken to select next position", end_time - start_time)
             #print ("points searched with area overlap", points_checked)
             if len(max_visible_position) == 0:
                 return
-            exploration_routine.remove(max_visible_position[-1])
             new_end_point = [0] * 3
             new_end_point[0] = max_visible_position[-1][0] *constants.AGENT_STEP_SIZE
             new_end_point[1] = max_visible_position[-1][1] *constants.AGENT_STEP_SIZE
@@ -268,12 +267,13 @@ class SequenceGenerator(object):
             #print("New goal selected : ", new_end_point)
 
             number_actions = self.agent.nav.go_to_goal(new_end_point, self.agent, success_distance)
+            exploration_routine.remove(max_visible_position[-1])
             self.event = self.agent.game_state.event
             if self.agent.game_state.goals_found:
                 return
             cover_floor.explore_point(self.event.position['x'], self.event.position['z'], self.agent,
                                       self.agent.nav.scene_obstacles_dict.values())
-            if self.agent.game_state.goals_found:
+            if self.agent.game_state.goals_found or self.agent.game_state.number_actions > 500:
                 return
 
     def explore_object(self, object_id_to_search):
