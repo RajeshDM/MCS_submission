@@ -357,14 +357,31 @@ class GameState(object):
             #action =  'MoveAhead, amount=0.5'
             #action =  'MoveAhead, amount=0.2'
         elif action['action'] == 'RotateLook':
-            action = "RotateLook, rotation=%d" % action['rotation'] 
+            if 'rotation' in action and 'horizon' in action :
+                action = "RotateLook, rotation=%d, horizon=%d" % (action['rotation'],action['horizon'])
+            elif 'rotation' in action :
+                action = "RotateLook, rotation=%d" % action['rotation']
+            elif 'horizon' in action:
+                action = "RotateLook, horizon=%d" % action['horizon']
         elif action['action'] == 'OpenObject':
             action = "OpenObject,objectId="+ str(action["objectId"])
             print ("constructed action for open object", action)
         '''
         '''
         #print (action)
+        end_time_1 = time.time()
+        action_creation_time = end_time_1 - t_start
+        #print ("action creating time",action_creation_time)
+
+        start_2 = time.time()
         self.event = self.env.step(action)
+        end_2 = time.time()
+        action_time = end_2-start_2
+
+        #print ("action time", action_time)
+
+
+
         lastActionSuccess = self.event.return_status
 
         for obj in self.event.object_list :

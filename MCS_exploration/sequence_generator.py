@@ -191,11 +191,14 @@ class SequenceGenerator(object):
 
         self.event = self.agent.game_state.event
 
+        #rotation = self.agent.game_state.event.rotation / 180 * math.pi
         cover_floor.update_seen(self.event.position['x'],self.event.position['z'],self.agent.game_state,self.event.rotation,self.event.camera_field_of_view,self.agent.nav.scene_obstacles_dict.values())
 
         cover_floor.explore_point(self.event.position['x'],self.event.position['z'],self.agent,self.agent.nav.scene_obstacles_dict.values())
         exploration_routine = cover_floor.flood_fill(0,0, cover_floor.check_validity)
 
+        if self.agent.game_state.goals_found:
+            return
         pose = game_util.get_pose(self.game_state.event)[:3]
 
         x_list, y_list = [],[]
@@ -222,16 +225,16 @@ class SequenceGenerator(object):
         #return
 
         #z = 0
-        while overall_area >  self.agent.game_state.world_poly.area :
+        while overall_area * 0.9 >  self.agent.game_state.world_poly.area :
             points_checked = 0
             #z+=1
-            max_visible = 0
             max_visible_position = []
             processed_points = {}
             start_time = time.time()
             #print(exploration_routine)
             min_distance = 20
             while (len(max_visible_position) == 0):
+                max_visible = 0
                 for elem in exploration_routine:
                     distance_to_point = math.sqrt((pose[0] - elem[0])**2 + (pose[1]-elem[1])**2)
 
@@ -279,8 +282,13 @@ class SequenceGenerator(object):
                 return
             cover_floor.explore_point(self.event.position['x'], self.event.position['z'], self.agent,
                                       self.agent.nav.scene_obstacles_dict.values())
-            if self.agent.game_state.goals_found or self.agent.game_state.number_actions > 500 or len(exploration_routine) == 0:
-
+            if self.agent.game_state.goals_found :
+               return
+            if self.agent.game_state.number_actions > 500 :
+                print ("Too many actions performed")
+                return
+            if len(exploration_routine) == 0:
+                print ("explored a lot of points but objects not found")
                 return
 
     def explore_object(self, object_id_to_search):

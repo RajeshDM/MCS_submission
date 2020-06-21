@@ -191,9 +191,9 @@ class GraphAgent(object):
             super(QuestionGameState, self.game_state).step(action)
         self.times[1] += time.time() - t_start
         self.num_steps += 1
+        return
         if self.num_steps % 100 == 0:
             print('game state step time %.3f' % (self.times[1] / (self.num_steps + 1)))
-        return
         self.pose = self.game_state.pose
         self.action[:] = 0
         self.action[self.action_util.action_dict_to_ind(action)] = 1

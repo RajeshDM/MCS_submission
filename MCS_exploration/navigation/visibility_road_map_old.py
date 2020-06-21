@@ -14,8 +14,12 @@ import matplotlib.pyplot as plt
 import random
 from shapely.geometry import Point, Polygon
 
-from tasks.bonding_box_navigation_mcs.geometry import Geometry
-from tasks.bonding_box_navigation_mcs.dijkstra_search import DijkstraSearch
+#from tasks.bonding_box_navigation_mcs.geometry import Geometry
+#from tasks.bonding_box_navigation_mcs.dijkstra_search import DijkstraSearch
+#from geometry import Geometry
+#from dijkstra_search import DijkstraSearch
+from MCS_exploration.navigation.geometry import Geometry
+from MCS_exploration.navigation.dijkstra_search import DijkstraSearch
 
 show_animation = True
 
@@ -407,19 +411,16 @@ class ObstaclePolygon:
             d = min(d, math.sqrt( (x-px)**2 + (y-py)**2))
         return d
 
-    def plot(self, clr="-k"):
-        plt.plot(self.x_list, self.y_list, clr)
-
-
     def contains_goal(self, goal):
         goal_point = Point(goal[0], goal[1])
-        return goal_point.within(self.get_goal_bonding_box_polygon())
-
-    def get_goal_bonding_box_polygon(self):
         coords = []
         for x, y in zip(self.x_list, self.y_list):
             coords.append(Point(x, y))
-        return Polygon(coords)
+        poly = Polygon(coords)
+        return goal_point.within(poly)
+
+    def plot(self, clr="-k"):
+        plt.plot(self.x_list, self.y_list, clr)
 
 
 

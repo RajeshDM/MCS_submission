@@ -56,8 +56,7 @@ class MetaController:
             goal = get_goal(action_dict['location'])
             success_distance = machine_common_sense.mcs_controller_ai2thor.MAX_REACH_DISTANCE - 0.2
             success = self.nav.go_to_goal(
-                self.nav_env, goal, success_distance, epsd_collector, frame_collector
-            )
+                self.nav_env, goal, success_distance)
             if not success:
                 print("Navigation Fail")
                 return False
@@ -165,7 +164,8 @@ class MetaController:
         self.get_inital_planner_state(scene_config)
         if isinstance(self.nav, BoundingBoxNavigator):
             self.nav.clear_obstacle_dict()
-            self.nav.initialize_scene_dict(scene_config['obstacles'])
+            #self.nav.initialize_scene_dict(scene_config['obstacles'])
+            self.nav.scene_obstacles_dict = scene_config['obstacles']
         meta_stage = 0
         while True:
             print("Meta-Stage: {}".format(meta_stage))

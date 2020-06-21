@@ -3,10 +3,10 @@ import random
 import math
 import matplotlib.pyplot as plt
 from tasks.bonding_box_navigation_mcs.fov import FieldOfView
-from shapely.geometry import Point
 
-SHOW_ANIMATION = False
+SHOW_ANIMATION = True
 random.seed(1)
+import time
 
 class BoundingBoxNavigator:
 
@@ -26,7 +26,11 @@ class BoundingBoxNavigator:
 	
 	def get_one_step_move(self, goal, roadmap):
 
-		pathX, pathY = roadmap.planning(self.agentX, self.agentY, goal[0], goal[1])
+		try :
+			pathX, pathY = roadmap.planning(self.agentX, self.agentY, goal[0], goal[1])
+		except ValueError:
+			return None,None
+
 
 		#print(i)
 		# execute a small step along that plan by
@@ -47,6 +51,9 @@ class BoundingBoxNavigator:
 
 	def clear_obstacle_dict(self):
 		self.scene_obstacles_dict = {}
+
+	def initialize_scene_dict(self,scene_dict):
+		self.scene_obstacles_dict = scene_dict
 
 	def add_obstacle_from_step_output(self, step_output):
 		for obj in step_output.object_list:
@@ -71,7 +78,7 @@ class BoundingBoxNavigator:
 					y_list.append(obj.dimensions[i]['z'])
 				self.scene_obstacles_dict[obj.uuid] = ObstaclePolygon(x_list, y_list)
 
-	def go_to_goal(self, nav_env, goal, success_distance):
+	def go_to_goal(self, nav_env, goal, success_distance, epsd_collector=None, frame_collector=None):
 		self.agentX = nav_env.step_output.position['x']
 		self.agentY = nav_env.step_output.position['z']
 		self.agentH = nav_env.step_output.rotation / 360 * (2 * math.pi)
@@ -80,31 +87,29 @@ class BoundingBoxNavigator:
 		gx, gy = goal[0], goal[2]
 		sx, sy = self.agentX, self.agentY
 
-		NAVIGATION_LIMIT_STEP = 100
-		SUCCESS_FLAG = False
-		for _ in range(NAVIGATION_LIMIT_STEP):
-			goal_obj_bonding_box = None
-			for id, box in self.scene_obstacles_dict.items():
-				if box.contains_goal(goal):
-					goal_obj_bonding_box = box.get_goal_bonding_box_polygon()
-					break
-			if not goal_obj_bonding_box:
-				dis_to_goal = math.sqrt((self.agentX-gx)**2 + (self.agentY-gy)**2)
-			else:
-				dis_to_goal = goal_obj_bonding_box.distance(Point(self.agentX, self.agentY))
+		while True:
+			start_time = time.time()
+			dis_to_goal = math.sqrt((self.agentX-gx)**2 + (self.agentY-gy)**2)
 			if dis_to_goal < self.epsilon:
-				SUCCESS_FLAG = True
 				break
+			count = 0
 			roadmap = IncrementalVisibilityRoadMap(self.radius, do_plot=False)
 			for obstacle_key, obstacle in self.scene_obstacles_dict.items():
 				if not obstacle.contains_goal((gx, gy)):
+					count +=1
 					roadmap.addObstacle(obstacle)
+
+			end_time = time.time()
+			roadmap_creatiion_time = end_time-start_time
+			#print("roadmap creation time", roadmap_creatiion_time)
 
 			fov = FieldOfView([sx, sy, 0], 42.5 / 180.0 * math.pi, self.scene_obstacles_dict.values())
 			fov.agentX = self.agentX
 			fov.agentY = self.agentY
 			fov.agentH = self.agentH
 			poly = fov.getFoVPolygon(100)
+
+			SHOW_ANIMATION = False
 
 			if SHOW_ANIMATION:
 				plt.cla()
@@ -128,6 +133,9 @@ class BoundingBoxNavigator:
 
 			stepSize, heading = self.get_one_step_move([gx, gy], roadmap)
 
+			if stepSize == None and heading == None :
+				return False
+
 			# needs to be replaced with turning the agent to the appropriate heading in the simulator, then stepping.
 			# the resulting agent position / heading should be used to set plan.agent* values.
 
@@ -146,9 +154,8 @@ class BoundingBoxNavigator:
 			self.agentY = nav_env.step_output.position['z']
 			self.agentH = nav_env.step_output.rotation / 360 * (2 * math.pi)
 
-		if not SUCCESS_FLAG:
-			print("Navigation Fail")
-		return SUCCESS_FLAG
+
+		return True
 
 
 

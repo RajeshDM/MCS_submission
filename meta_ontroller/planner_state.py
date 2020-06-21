@@ -47,6 +47,8 @@ class GameState:
             self.goal_predicate_list = []
             if self.goal_category == "traversal":
                 self.goal_object_id = PlanParser.create_legal_object_name(config['goal']['metadata']['target']['id'])
+                #if self.goal_object_id not in self.object_loc_info :
+                #    return
                 agent_final_loc = PlanParser.replace_digital_number(
                     "loc|{:.2f}|{:.2f}|{:.2f}".format(
                         self.object_loc_info[self.goal_object_id][0],

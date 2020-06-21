@@ -50,11 +50,13 @@ def explore_scene(sequence_generator,event, scene_type=None, scene_number=None):
     
     config_data['performerStart'] = {}
     config_data['performerStart']['position'] = {}
-        
-    config_data['performerStart']['position']['x']=sequence_generator.event.position['x']
-    config_data['performerStart']['position']['y']=sequence_generator.event.position['y']
-    config_data['performerStart']['position']['z']=sequence_generator.event.position['z']
+    config_data['performerStart']['rotation'] = {}
 
+    config_data['performerStart']['position']['x']=sequence_generator.agent.game_state.event.position['x']
+    config_data['performerStart']['position']['y']=sequence_generator.agent.game_state.event.position['y']
+    config_data['performerStart']['position']['z']=sequence_generator.agent.game_state.event.position['z']
+
+    config_data['performerStart']['rotation']['y']=sequence_generator.agent.game_state.event.rotation
     config_data['objects'] = []
 
     current_explored_objects = sequence_generator.agent.game_state.discovered_objects
@@ -68,6 +70,8 @@ def explore_scene(sequence_generator,event, scene_type=None, scene_number=None):
     #print (config_data['goal'])
     config_data['goal']['category'] = sequence_generator.event.goal.metadata['category']
     config_data['obstacles'] = sequence_generator.agent.nav.scene_obstacles_dict
+
+    print ("Agent data after end of exploration : x,y,rotation", config_data['performerStart']['position']['x'], config_data['performerStart']['position']['z'], config_data['performerStart']['rotation']['y'] )
 
     return config_data
 

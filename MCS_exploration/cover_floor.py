@@ -349,17 +349,24 @@ def explore_point(x,y, agent,obstacles):
     directions = 8
     event = agent.game_state.event
     camera_field_of_view = agent.game_state.event.camera_field_of_view
+    action = {'action':'RotateLook', 'horizon':15}
+    agent.game_state.step(action)
     action = {'action':'RotateLook', 'rotation':45}
     for direction in range (0,directions):
         agent.game_state.step(action)
         rotation = agent.game_state.event.rotation
-        update_seen(x , y ,agent.game_state,rotation,camera_field_of_view, obstacles )
+        update_seen(x , y ,agent.game_state,rotation,camera_field_of_view, agent.nav.scene_obstacles_dict.values() )
         if agent.game_state.goals_found == True :
             return
+    action = {'action':'RotateLook', 'horizon':-15}
+    agent.game_state.step(action)
 
 
 def update_seen(x,y,game_state,rotation,camera_field_of_view,obstacles):
-    fov = FieldOfView([x, y, rotation], camera_field_of_view / 180.0 * math.pi, obstacles)
+    #rotation = (rotation - 45)%360
+    #print (rotation)
+    rotation_rad = rotation / 180 * math.pi
+    fov = FieldOfView([x, y, rotation_rad], camera_field_of_view / 180.0 * math.pi, obstacles)
     poly = fov.getFoVPolygon(17)
 
     view = Polygon(zip(poly.x_list, poly.y_list))
@@ -397,7 +404,9 @@ def get_point_all_new_coverage(x,y,game_state,rotation,obstacles):
     return get_point_new_coverage(x,y,game_state,rotation,360,obstacles)
 
 def get_point_new_coverage(x,y,game_state, rotation,camera_field_of_view,obstacles):
-    fov_checker = FieldOfView([x,y,rotation],camera_field_of_view/180.0*math.pi, obstacles)
+    #rotation = (rotation - 45)%360
+    rotation_rad = rotation / 180 * math.pi
+    fov_checker = FieldOfView([x,y,rotation_rad],camera_field_of_view/180.0*math.pi, obstacles)
 
     checkPoly = fov_checker.getFoVPolygon(17)
 
