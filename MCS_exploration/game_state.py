@@ -106,6 +106,8 @@ class GameState(object):
         self.goals_found = False
         self.goals = []
         self.world_poly = None
+        self.new_found_objects = []
+        self.new_object_found = False
 
     def process_frame(self, run_object_detection=False):
         self.im_count += 1
@@ -337,6 +339,8 @@ class GameState(object):
         #print ("end of reset in game state function")
 
     def step(self, action_or_ind):
+        self.new_found_objects = []
+        self.new_object_found = False
         if type(action_or_ind) == int:
             action = self.action_util.actions[action_or_ind]
         else:
@@ -389,6 +393,8 @@ class GameState(object):
                 print ("uuid : ", obj.uuid)
                 self.discovered_explored[obj.uuid] = {0:obj.position}
                 self.discovered_objects.append(obj.__dict__)
+                self.new_object_found = True
+                self.new_found_objects.append(obj.__dict__)
 
         self.add_obstacle_func(self.event)
         self.number_actions += 1

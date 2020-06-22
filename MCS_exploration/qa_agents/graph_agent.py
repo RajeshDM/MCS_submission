@@ -33,7 +33,8 @@ class GraphAgent(object):
                 self.network = FreeSpaceNetwork(constants.GRU_SIZE, 1, 1)
                 self.network.create_net(add_loss=False)
         '''
-        self.nav = bounding_box_navigator.BoundingBoxNavigator()
+        self.nav_radius = 0.1
+        self.nav = bounding_box_navigator.BoundingBoxNavigator(self.nav_radius)
         if game_state is None:
             self.game_state = GameState(sess=sess,env=env)
             self.game_state.add_obstacle_func = self.nav.add_obstacle_from_step_output

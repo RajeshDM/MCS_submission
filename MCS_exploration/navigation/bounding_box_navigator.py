@@ -103,9 +103,9 @@ class BoundingBoxNavigator:
 			count = 0
 			for obstacle_key, obstacle in self.scene_obstacles_dict.items():
 				if not obstacle.contains_goal((gx, gy)):
-					count += 1
-					if count > 2:
-						break
+					#count += 1
+					#if count > 2:
+					#	break
 					roadmap.addObstacle(obstacle)
 
 			end_time = time.time()

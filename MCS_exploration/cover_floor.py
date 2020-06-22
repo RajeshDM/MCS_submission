@@ -461,6 +461,18 @@ def get_point_new_coverage(x,y,game_state, rotation,camera_field_of_view,obstacl
 
     return newPoly.area
 
+def get_point_between_points(p1, p2, radius):
+
+    distance_ratio = -0.1
+    distance_new_point = 0
+    while (distance_new_point < 1.2 * radius):
+        x = p1[0] + distance_ratio * (p2[0] - p1[0])
+        y = p1[1] + distance_ratio * (p2[1] - p1[1])
+        new_pt = [x,y]
+        distance_new_point= math.sqrt((new_pt[0]-p1[0])**2+(new_pt[1]-p1[1])**2)
+        distance_ratio -= 0.1
+
+    return new_pt
 
 '''
 def get_visible_points_v2(x,y,direction,camera_field_of_view,radius):
@@ -735,7 +747,13 @@ if __name__ == '__main__':
     #print (len(get_visible_points (x,z,1 , 45, 40)))
     #print (len(get_visible_points_old (x,z,0 , 45, 40)))
 
-    end_time = time.time()
+    radius = 0.1
+    p1 = [0.21,-1.68]
+    p2 = [-0.14,-2.08]
 
+    end_time = time.time()
+    new_pt = get_point_between_points(p1,p2,0.1)
+
+    print ("new point", new_pt )
     print ("processing time = ", end_time-start_time)
 

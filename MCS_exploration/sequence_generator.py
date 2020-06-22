@@ -13,6 +13,9 @@ from cover_floor import *
 import math
 import time
 from shapely.geometry import Point, Polygon
+from tasks.point_goal_navigation.navigator import NavigatorResNet
+from tasks.search_object_in_receptacle.face_turner import FaceTurnerResNet
+
 
 #from navigation.bounding_box_navigator import BoundingBoxNavigator, SHOW_ANIMATION
 #from navigation.visibility_road_map import ObstaclePolygon
@@ -225,6 +228,8 @@ class SequenceGenerator(object):
         #return
 
         #z = 0
+
+        '''
         while overall_area * 0.9 >  self.agent.game_state.world_poly.area :
             points_checked = 0
             #z+=1
@@ -240,9 +245,9 @@ class SequenceGenerator(object):
 
                     if distance_to_point > min_distance and elem not in processed_points:
                         points_checked += 1
-                        for obstacle_key, obstacle in self.agent.nav.scene_obstacles_dict.items():
-                            if not obstacle.contains_goal(elem):
-                                continue
+                        #for obstacle_key, obstacle in self.agent.nav.scene_obstacles_dict.items():
+                        #    if obstacle.contains_goal(elem):
+                        #        continue
 
                         new_visible_area = cover_floor.get_point_all_new_coverage(elem[0]*constants.AGENT_STEP_SIZE, elem[1]*constants.AGENT_STEP_SIZE, self.agent.game_state,self.agent.game_state.event.rotation,self.agent.nav.scene_obstacles_dict.values() )
                         processed_points[elem] = new_visible_area
@@ -290,25 +295,117 @@ class SequenceGenerator(object):
             if len(exploration_routine) == 0:
                 print ("explored a lot of points but objects not found")
                 return
+        '''
+
+        self.explore_object(self.agent.game_state.discovered_objects[0]['uuid'])
 
     def explore_object(self, object_id_to_search):
         uuid = object_id_to_search
         success_distance = constants.AGENT_STEP_SIZE
         object_polygon = self.agent.nav.scene_obstacles_dict[uuid]
-        goal_pose = object_polygon.x_list[0], object_polygon.y_list[0]
-        self.agent.nav.go_to_goal(goal_pose,self.agent,success_distance,self.graph,True)
-        action = {"action": "OpenObject", "objectId": uuid}
-        self.agent.step(action)
+        current_position = self.agent.game_state.event.position
+        current_object_position = 0
+        i = 0
+        for elem in self.agent.game_state.discovered_objects:
+            if uuid == elem['uuid']:
+                current_object = elem
+                current_object_position = i
+                break
+            i+= 1
+        goal_object_centre = [current_object['position']['x'], current_object['position']['y'],
+                              current_object['position']['z']]
 
-        if self.agent.game_state.event.return_status == "SUCCESSFUL":
-            action = {"action": "RotateLook", "horizon": 30}
+        number_vertices = 4
+        min_distance = math.inf
+        goal_poses = []
+        for i in range (4,4+number_vertices):
+            goal = [current_object['dimensions'][i]['x'],current_object['dimensions'][i]['y'],current_object['dimensions'][i]['z']]
+
+            distance_to_point = math.sqrt((current_position['x'] - goal[0]) ** 2 + (current_position['z'] - goal[2]) ** 2)
+            #if distance_to_point < min_distance :
+            #    goal_pose = goal
+            #    min_distance = distance_to_point
+            goal_poses.append(( goal , distance_to_point))
+
+        #self.agent.nav.go_to_goal(goal_pose,self.agent,success_distance,self.graph,True)
+
+        goal_poses = sorted(goal_poses, key = lambda x: x[1])
+
+        for goal_pose in goal_poses:
+            goal_pose_loc = goal_pose[0]
+            goal_pose_x_z =(goal_pose_loc[0],goal_pose_loc[2])
+            goal_pose_x_z = cover_floor.get_point_between_points(goal_pose_x_z,[goal_object_centre[0],goal_object_centre[2]],self.agent.nav_radius)
+
+            goal_inside_obstacle = False
+
+            for obstacle_key, obstacle in self.agent.nav.scene_obstacles_dict.items():
+                if obstacle.contains_goal(goal_pose_loc):
+                    goal_inside_obstacle = True
+                    break
+
+            if goal_inside_obstacle :
+                continue
+
+            nav_success = self.agent.nav.go_to_goal(goal_pose_x_z, self.agent, success_distance)
+
+            if nav_success == False:
+                continue
+
+
+            theta = NavigatorResNet.get_polar_direction(goal_object_centre, self.agent.game_state.event)
+            omega = FaceTurnerResNet.get_head_tilt(goal_object_centre, self.agent.game_state.event) - self.agent.game_state.event.head_tilt
+            action = {'action':'RotateLook', 'rotation':theta, 'horizon':omega}
             self.agent.step(action)
-            action = {"action": "RotateLook", "rotation": 15}
-            self.agent.step(action)
-            action = {"action": "RotateLook", "rotation": 15}
-            self.agent.step(action)
-            action = {"action": "RotateLook", "rotation": -45}
-            self.agent.step(action)
+
+            object_visible = False
+            for elem in self.agent.game_state.event.object_list :
+                if uuid == elem.uuid:
+                    object_visible = True
+                    break
+            if object_visible == True :
+                action = {"action": "OpenObject", "objectId": uuid}
+                self.agent.step(action)
+                status = self.agent.game_state.event.return_status
+                if status == "SUCCESSFUL" or  status == "IS_OPENED_COMPLETELY":
+                    #TODO update if new object is seen and return
+                    self.agent.game_state.discovered_objects[current_object_position]['opened'] = True
+                    self.agent.game_state.discovered_objects[current_object_position]['openable'] = True
+                    if self.agent.game_state.new_object_found == True:
+                        self.update_object_data(uuid)
+                        return
+                    action = {"action": "RotateLook", "rotation": 15}
+                    self.agent.step(action)
+                    if self.agent.game_state.new_object_found == True :
+                        self.update_object_data(uuid)
+                        return
+                    action = {"action": "RotateLook", "rotation": -30}
+                    self.agent.step(action)
+                    if self.agent.game_state.new_object_found == True :
+                        self.update_object_data(uuid)
+                        return
+                elif status == "NOT_OPENABLE" or status == "NOT_INTERACTABLE" or status == "NOT_OBJECT" :
+                    self.agent.game_state.discovered_objects[current_object_position]['openable'] = False
+                    print ("opening failed")
+                    return
+                elif status == "OBSTRUCTED" or "OUT_OF_REACH":
+                    #TODO Maybe add something different for out of reach later
+                    continue
+
+            else :
+                continue
+
+    def update_object_data(self,parent_obj_id):
+        for i, elem in enumerate(self.agent.game_state.new_found_objects):
+            for j, obj in enumerate(self.agent.game_state.discovered_objects):
+                if elem['uuid'] == obj['uuid']:
+                    self.agent.game_state.discovered_objects[j][
+                        'agent_position'] = self.agent.game_state.event.position
+                    self.agent.game_state.discovered_objects[j][
+                        'agent_tilt'] = self.agent.game_state.event.head_tilt
+                    self.agent.game_state.discovered_objects[j][
+                        'agent_rotation'] = self.agent.game_state.event.rotation
+                    self.agent.game_state.discovered_objects[j]['locationParent'] =parent_obj_id
+                    break
 
 
 if __name__ == '__main__':

@@ -85,7 +85,7 @@ class BoundingBoxNavigator:
 		for _ in range(NAVIGATION_LIMIT_STEP):
 			goal_obj_bonding_box = None
 			for id, box in self.scene_obstacles_dict.items():
-				if box.contains_goal(goal):
+				if box.contains_goal((gx,gy)):
 					goal_obj_bonding_box = box.get_goal_bonding_box_polygon()
 					break
 			if not goal_obj_bonding_box:

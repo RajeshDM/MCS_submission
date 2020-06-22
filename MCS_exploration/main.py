@@ -85,14 +85,14 @@ def explore_all_scenes():
     all_scene_types = ['retrieval_goal-', 'traversal_goal-', 'transferral_goal-']
     #scene_types = ['retrieval_goal-', 'traversal_goal-', 'transferral_goal-']
     #scene_types = ['retrieval_goal-', 'traversal_goal-']#, 'transferral_goal-']
-    scene_types = ['transferral_goal-']
+    #scene_types = ['transferral_goal-']
     #scene_types = ['traversal_goal-']
-    #scene_types = ['retrieval_goal-']
+    scene_types = ['retrieval_goal-']
 
 
     #scene_numbers = ['0933','0934','0935']
     #scene_numbers = ['0058']#,'0934','0935']
-    scene_numbers = ['0001']
+    scene_numbers = ['0004']
     #scene_numbers = create_scene_numbers('0100', '0201')
     print (scene_numbers)
     #exit()
