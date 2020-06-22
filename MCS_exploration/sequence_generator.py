@@ -229,8 +229,7 @@ class SequenceGenerator(object):
 
         #z = 0
 
-        '''
-        while overall_area * 0.9 >  self.agent.game_state.world_poly.area :
+        while overall_area * 0.6 >  self.agent.game_state.world_poly.area :
             points_checked = 0
             #z+=1
             max_visible_position = []
@@ -288,16 +287,22 @@ class SequenceGenerator(object):
             cover_floor.explore_point(self.event.position['x'], self.event.position['z'], self.agent,
                                       self.agent.nav.scene_obstacles_dict.values())
             if self.agent.game_state.goals_found :
-               return
+                return
             if self.agent.game_state.number_actions > 500 :
                 print ("Too many actions performed")
                 return
             if len(exploration_routine) == 0:
                 print ("explored a lot of points but objects not found")
                 return
-        '''
 
-        self.explore_object(self.agent.game_state.discovered_objects[0]['uuid'])
+        for object in self.agent.game_state.discovered_objects :
+            self.explore_object(object['uuid'])
+            if self.agent.game_state.goals_found :
+                return
+            if self.agent.game_state.number_actions > 500 :
+                print ("Too many actions performed")
+                return
+
 
     def explore_object(self, object_id_to_search):
         uuid = object_id_to_search
@@ -373,12 +378,12 @@ class SequenceGenerator(object):
                     if self.agent.game_state.new_object_found == True:
                         self.update_object_data(uuid)
                         return
-                    action = {"action": "RotateLook", "rotation": 15}
+                    action = {"action": "RotateLook", "rotation": 30}
                     self.agent.step(action)
                     if self.agent.game_state.new_object_found == True :
                         self.update_object_data(uuid)
                         return
-                    action = {"action": "RotateLook", "rotation": -30}
+                    action = {"action": "RotateLook", "rotation": -45}
                     self.agent.step(action)
                     if self.agent.game_state.new_object_found == True :
                         self.update_object_data(uuid)

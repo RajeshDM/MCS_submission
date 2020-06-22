@@ -93,8 +93,9 @@ class BoundingBoxNavigator:
 
 		gx, gy = goal_pose[0], goal_pose[1]
 		sx, sy = self.agentX, self.agentY
+		current_nav_steps = 0
 
-		while True:
+		while current_nav_steps < 100:
 			start_time = time.time()
 			dis_to_goal = math.sqrt((self.agentX-gx)**2 + (self.agentY-gy)**2)
 			if dis_to_goal < self.epsilon:
@@ -174,6 +175,7 @@ class BoundingBoxNavigator:
 			self.agentX = agent.game_state.event.position['x']
 			self.agentY = agent.game_state.event.position['z']
 			self.agentH = rotation / 360 * (2 * math.pi)
+			current_nav_steps += 1
 			cover_floor.update_seen(self.agentX, self.agentY, agent.game_state, rotation, 42.5,
 									self.scene_obstacles_dict.values())
 
@@ -187,7 +189,7 @@ class BoundingBoxNavigator:
 
 			#agent.game_state.step(action="MoveAhead", amount=0.5)
 			action={'action':"MoveAhead", 'amount':0.5}
-			agent.step(action)#={'action':"RotateLook",rotation=rotation_degree}
+			agent.step(action)
 			rotation = agent.game_state.event.rotation
 			self.agentX = agent.game_state.event.position['x']
 			self.agentY = agent.game_state.event.position['z']
@@ -195,7 +197,7 @@ class BoundingBoxNavigator:
 			cover_floor.update_seen(self.agentX, self.agentY, agent.game_state, rotation, 42.5,
 									self.scene_obstacles_dict.values())
 
-
+			current_nav_steps += 1
 		return True
 
 
