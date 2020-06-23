@@ -22,7 +22,7 @@ if __name__ == "__main__":
     '''
     #env = McsEnv(task="interaction_scenes", scene_type="transferral", start_scene_number=1)
     env = McsEnv(task="interaction_scenes", scene_type="retrieval", start_scene_number=71)
-    #env = McsEnv(task="interaction_scenes", scene_type='traversal', start_scene_number=68)
+    #env = McsEnv(task="interaction_scenes", scene_type='traversal', start_scene_number=95)
     metaController = MetaController(env)
     #sequence_generator = SequenceGenerator(None,env.controller)
     result_total = 0

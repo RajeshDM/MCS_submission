@@ -328,6 +328,7 @@ class GameState(object):
                     print("uuid : ", obj.uuid)
                     self.discovered_explored[obj.uuid] = {0: obj.position}
                     self.discovered_objects.append(obj.__dict__)
+                    self.discovered_objects[-1]['explored'] = 0
             self.add_obstacle_func(self.event)
             print ("type of event 2 : ", type(self.event))
             lastActionSuccess = self.event.return_status

@@ -288,21 +288,38 @@ class SequenceGenerator(object):
                                       self.agent.nav.scene_obstacles_dict.values())
             if self.agent.game_state.goals_found :
                 return
-            if self.agent.game_state.number_actions > 500 :
+            if self.agent.game_state.number_actions > 700 :
                 print ("Too many actions performed")
                 return
             if len(exploration_routine) == 0:
                 print ("explored a lot of points but objects not found")
                 return
 
-        for object in self.agent.game_state.discovered_objects :
-            self.explore_object(object['uuid'])
-            if self.agent.game_state.goals_found :
-                return
-            if self.agent.game_state.number_actions > 500 :
-                print ("Too many actions performed")
-                return
+        all_explored = False
+        while (all_explored == False):
+            current_pos = self.agent.game_state.event.position
+            min_distance = math.inf
+            flag = 0
+            for object in self.agent.game_state.discovered_objects :
+                #distance_to_object =
+                if object['explored'] == 0 :
+                    flag = 1
+                    distance_to_object = math.sqrt( (current_pos['x'] - object['position']['x'] )** 2 + (current_pos['z']-object['position']['z'])**2)
 
+                if distance_to_object < min_distance:
+                    min_distance_obj_id = object['uuid']
+                    min_distance = distance_to_object
+
+                self.explore_object(min_distance_obj_id)
+                if self.agent.game_state.goals_found :
+                    return
+                if self.agent.game_state.number_actions > 700 :
+                    print ("Too many actions performed")
+                    return
+            if flag == 0 :
+                all_explored = True
+
+        self.explore_object(self.agent.game_state.discovered_objects[0])
 
     def explore_object(self, object_id_to_search):
         uuid = object_id_to_search
@@ -319,6 +336,7 @@ class SequenceGenerator(object):
             i+= 1
         goal_object_centre = [current_object['position']['x'], current_object['position']['y'],
                               current_object['position']['z']]
+        self.agent.game_state.discovered_objects[current_object_position]['explored'] = 1
 
         number_vertices = 4
         min_distance = math.inf

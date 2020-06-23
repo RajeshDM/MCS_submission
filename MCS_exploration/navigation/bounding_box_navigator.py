@@ -20,10 +20,12 @@ class BoundingBoxNavigator:
 		self.epsilon = None
 
 		self.scene_obstacles_dict = {}
+		self.scene_obstacles_dict_roadmap = {}
 		self.scene_plot = None
 
 		self.radius = robot_radius
 		self.maxStep = maxStep
+		self.current_nav_steps = 0
 
 	
 	def get_one_step_move(self, goal, roadmap):
@@ -61,18 +63,19 @@ class BoundingBoxNavigator:
 
 	def add_obstacle_from_step_output(self, step_output):
 		for obj in step_output.object_list:
-			if len(obj.dimensions) > 0:
+			if len(obj.dimensions) > 0 and obj.uuid not in self.scene_obstacles_dict:
 				x_list = []
 				y_list = []
 				for i in range(4, 8):
 					x_list.append(obj.dimensions[i]['x'])
 					y_list.append(obj.dimensions[i]['z'])
 				self.scene_obstacles_dict[obj.uuid] = ObstaclePolygon(x_list, y_list)
+				self.scene_obstacles_dict_roadmap[obj.uuid] = 0
 			if obj.held:
 				del self.scene_obstacles_dict[obj.uuid]
 
 		for obj in step_output.structural_object_list:
-			if len(obj.dimensions) > 0:
+			if len(obj.dimensions) > 0 and obj.uuid not in self.scene_obstacles_dict:
 				if obj.uuid == "ceiling" or obj.uuid == "floor":
 					continue
 				x_list = []
@@ -81,11 +84,13 @@ class BoundingBoxNavigator:
 					x_list.append(obj.dimensions[i]['x'])
 					y_list.append(obj.dimensions[i]['z'])
 				self.scene_obstacles_dict[obj.uuid] = ObstaclePolygon(x_list, y_list)
+				self.scene_obstacles_dict_roadmap[obj.uuid] = 0
 
 	#def go_to_goal(self, nav_env, goal, success_distance, epsd_collector=None, frame_collector=None):
 
 	def go_to_goal(self, goal_pose, agent, success_distance):
 
+		self.current_nav_steps = 0
 		self.agentX = agent.game_state.event.position['x']
 		self.agentY = agent.game_state.event.position['z']
 		self.agentH = agent.game_state.event.rotation / 360 * (2 * math.pi)
@@ -93,21 +98,28 @@ class BoundingBoxNavigator:
 
 		gx, gy = goal_pose[0], goal_pose[1]
 		sx, sy = self.agentX, self.agentY
-		current_nav_steps = 0
+		roadmap = IncrementalVisibilityRoadMap(self.radius, do_plot=False)
+		for obstacle_key, obstacle in self.scene_obstacles_dict.items():
+			self.scene_obstacles_dict_roadmap[obstacle_key] = 0
 
-		while current_nav_steps < 100:
+		for obstacle_key, obstacle in self.scene_obstacles_dict.items():
+			if not obstacle.contains_goal((gx, gy)):
+				self.scene_obstacles_dict_roadmap[obstacle_key] = 1
+				roadmap.addObstacle(obstacle)
+
+		while self.current_nav_steps < 150:
 			start_time = time.time()
 			dis_to_goal = math.sqrt((self.agentX-gx)**2 + (self.agentY-gy)**2)
+
+			for obstacle_key, obstacle in self.scene_obstacles_dict.items():
+				if self.scene_obstacles_dict_roadmap[obstacle_key] == 0:
+					print ("not added obstacle", self.current_nav_steps)
+					if not obstacle.contains_goal((gx, gy)) :
+						print ("adding new obstacles ", self.current_nav_steps)
+						self.scene_obstacles_dict_roadmap[obstacle_key] =1
+						roadmap.addObstacle(obstacle)
 			if dis_to_goal < self.epsilon:
 				break
-			roadmap = IncrementalVisibilityRoadMap(self.radius, do_plot=False)
-			count = 0
-			for obstacle_key, obstacle in self.scene_obstacles_dict.items():
-				if not obstacle.contains_goal((gx, gy)):
-					#count += 1
-					#if count > 2:
-					#	break
-					roadmap.addObstacle(obstacle)
 
 			end_time = time.time()
 			roadmap_creatiion_time = end_time-start_time
@@ -175,7 +187,7 @@ class BoundingBoxNavigator:
 			self.agentX = agent.game_state.event.position['x']
 			self.agentY = agent.game_state.event.position['z']
 			self.agentH = rotation / 360 * (2 * math.pi)
-			current_nav_steps += 1
+			self.current_nav_steps += 1
 			cover_floor.update_seen(self.agentX, self.agentY, agent.game_state, rotation, 42.5,
 									self.scene_obstacles_dict.values())
 
@@ -197,7 +209,7 @@ class BoundingBoxNavigator:
 			cover_floor.update_seen(self.agentX, self.agentY, agent.game_state, rotation, 42.5,
 									self.scene_obstacles_dict.values())
 
-			current_nav_steps += 1
+			self.current_nav_steps += 1
 		return True
 
 
