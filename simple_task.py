@@ -27,10 +27,10 @@ if __name__ == "__main__":
     end_scene_number = 10
     scene_type = 'traversal'
     #env = McsEnv(task="interaction_scenes", scene_type="transferral", start_scene_number=0)
-    #env = McsEnv(task="interaction_scenes", scene_type="retrieval", start_scene_number= 14)
-    env = McsEnv(task="interaction_scenes", scene_type='traversal', start_scene_number=6)
+    env = McsEnv(task="interaction_scenes", scene_type="retrieval", start_scene_number= 987)
+    #env = McsEnv(task="interaction_scenes", scene_type='traversal', start_scene_number=108)
     #env = McsEnv(task="interaction_scenes", scene_type=scene_type, start_scene_number=start_scene_number)
-    f = open(scene_type+"_"+str(start_scene_number)+"_"+str(end_scene_number), "a")
+    #f = open(scene_type+"_"+str(start_scene_number)+"_"+str(end_scene_number), "a")
     metaController = MetaController(env)
     result_total = 0
     number_tasks_attempted = 0
@@ -44,8 +44,8 @@ if __name__ == "__main__":
         sys.stdout.flush()
         number_tasks_attempted +=1
         game_state = metaController.sequence_generator_object.agent.game_state
-        f.write("scene,"+str(env.current_scene)+ ",reward,"+str(env.step_output.reward)+ ",actions," +
-                str(game_state.number_actions)+ ",exploration_success," + str(game_state.goals_found) + ",total success,"+ str(result_total)  +"\n")
+        #f.write("scene,"+str(env.current_scene)+ ",reward,"+str(env.step_output.reward)+ ",actions," +
+        #        str(game_state.number_actions)+ ",exploration_success," + str(game_state.goals_found) + ",total success,"+ str(result_total)  +"\n")
 
     print ("Number tasks attempted" , number_tasks_attempted)
     print ("Total Success", result_total)
