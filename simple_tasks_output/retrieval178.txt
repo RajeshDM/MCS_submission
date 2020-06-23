@@ -1,0 +1,28 @@
+CrashReporter: initialized
+Mono path[0] = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Resources/Data/Managed'
+Mono config path = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Mono/etc'
+/Users/rajesh/Rajesh/Subjects/Research/aiThor/interaction_scenes_divided/retrieval/retrieval_goal-0178.json
+type of event 2 :  <class 'machine_common_sense.mcs_step_output.MCS_Step_Output'>
+uuid :  ef0826f1-38d0-42c0-bfd0-014ebb3217ad
+103.15416645741215
+constructed action for open object OpenObject,objectId=ef0826f1-38d0-42c0-bfd0-014ebb3217ad
+uuid :  b4e23664-3f3e-4641-8c30-159d74196518
+env step time 0.296
+{'uuid': 'ef0826f1-38d0-42c0-bfd0-014ebb3217ad', 'color': {'r': 252, 'g': 119, 'b': 89}, 'dimensions': [{'x': 2.97975731, 'y': -0.00357890129, 'z': 1.98520231}, {'x': 3.31009269, 'y': -0.00355669856, 'z': 1.6548624}, {'x': 3.61062527, 'y': -0.00354263186, 'z': 1.95539081}, {'x': 3.28028965, 'y': -0.00356483459, 'z': 2.2857306}, {'x': 2.979741, 'y': 0.28209585, 'z': 1.98520529}, {'x': 3.31007648, 'y': 0.282118052, 'z': 1.65486538}, {'x': 3.61060882, 'y': 0.282132119, 'z': 1.95539367}, {'x': 3.28027344, 'y': 0.282109916, 'z': 2.28573346}], 'direction': {'x': 0.9103682, 'y': -0.0747784153, 'z': -0.4069866}, 'distance': 10.094058, 'distance_in_steps': 10.094058, 'distance_in_world': 5.057351, 'held': False, 'mass': 0.25, 'material_list': ['PAPER'], 'position': {'x': 3.29189944, 'y': 0.08121044, 'z': 1.97480583}, 'rotation': {'x': 0.00189607288, 'y': 225.000381, 'z': -0.00272257882}, 'shape': 'box', 'texture_color_list': ['brown'], 'visible': True, 'explored': 1, 'locationParent': None, 'opened': True, 'openable': True, 'id': 'ef0826f1-38d0-42c0-bfd0-014ebb3217ad'}
+{'uuid': 'b4e23664-3f3e-4641-8c30-159d74196518', 'color': {'r': 135, 'g': 82, 'b': 14}, 'dimensions': [{'x': 3.14423823, 'y': 0.00985004753, 'z': 1.97682238}, {'x': 3.29234219, 'y': 0.009893726, 'z': 1.82873011}, {'x': 3.4377346, 'y': 0.009922736, 'z': 1.97413409}, {'x': 3.289631, 'y': 0.009879058, 'z': 2.12222624}, {'x': 3.14422369, 'y': 0.06929089, 'z': 1.97682524}, {'x': 3.2923274, 'y': 0.069334574, 'z': 1.828733}, {'x': 3.43772, 'y': 0.06936359, 'z': 1.97413683}, {'x': 3.289616, 'y': 0.0693199039, 'z': 2.122229}], 'direction': {'x': 0.85052824, 'y': -0.507181168, 'z': -0.139172524}, 'distance': 1.4247658, 'distance_in_steps': 1.4247658, 'distance_in_world': 0.842616856, 'held': False, 'mass': 0.25, 'material_list': ['PLASTIC'], 'position': {'x': 3.29214525, 'y': 0.0432764962, 'z': 1.97489464}, 'rotation': {'x': 0.008083628, 'y': 224.997757, 'z': 359.988037}, 'shape': 'bowl', 'texture_color_list': ['black'], 'visible': True, 'explored': 0, 'locationParent': 'ef0826f1-38d0-42c0-bfd0-014ebb3217ad', 'agent_position': {'x': 2.58911943, 'y': 0.4625, 'z': 2.08993125}, 'agent_tilt': 28.000021, 'agent_rotation': 99.9999847, 'id': 'b4e23664-3f3e-4641-8c30-159d74196518'}
+Agent data after end of exploration : x,y,rotation 2.58911943 2.08993125 99.9999847
+Goal object found status :  True
+Meta-Stage: 0
+{'action': 'FaceToFront'}
+Meta-Stage: 1
+{'action': 'GotoLocation', 'location': 'loc|3.29|0.04|1.97'}
+Meta-Stage: 2
+{'action': 'FaceToObject', 'location': 'loc|3.29|0.04|1.97', 'objectId': 'legal_b4e23664_3f3e_4641_8c30_159d74196518'}
+Meta-Stage: 3
+{'action': 'PickupObject', 'objectId': 'legal_b4e23664_3f3e_4641_8c30_159d74196518'}
+Meta-Stage: 4
+{'action': 'End', 'value': 1}
+Task Reward: 1
+
+Number tasks attempted 1
+Total Success 1

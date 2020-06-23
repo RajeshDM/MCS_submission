@@ -1,0 +1,22 @@
+CrashReporter: initialized
+Mono path[0] = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Resources/Data/Managed'
+Mono config path = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Mono/etc'
+/Users/rajesh/Rajesh/Subjects/Research/aiThor/interaction_scenes_divided/retrieval/retrieval_goal-0107.json
+uuid :  13273306-1afc-4dd0-830b-b90bf32516e3
+type of event 2 :  <class 'machine_common_sense.mcs_step_output.MCS_Step_Output'>
+{'uuid': '13273306-1afc-4dd0-830b-b90bf32516e3', 'color': {'r': 110, 'g': 184, 'b': 7}, 'dimensions': [{'x': -1.99876475, 'y': -0.00331503153, 'z': 2.2346673}, {'x': -2.54932785, 'y': -0.00328870118, 'z': 2.78522968}, {'x': -3.05021143, 'y': -0.00327837467, 'z': 2.28434539}, {'x': -2.49964833, 'y': -0.003304705, 'z': 1.733783}, {'x': -1.998755, 'y': 0.282359719, 'z': 2.23466349}, {'x': -2.549318, 'y': 0.282386065, 'z': 2.78522587}, {'x': -3.05020165, 'y': 0.282396376, 'z': 2.28434134}, {'x': -2.49963856, 'y': 0.282370031, 'z': 1.73377919}], 'direction': {'x': -0.913932, 'y': -0.07588384, 'z': 0.398710251}, 'distance': 9.887282, 'distance_in_steps': 9.887282, 'distance_in_world': 4.954161, 'held': False, 'mass': 0.5, 'material_list': ['PAPER'], 'position': {'x': -2.51900673, 'y': 0.0814744458, 'z': 2.25199127}, 'rotation': {'x': 0.000835292041, 'y': 44.9999542, 'z': -0.00193837238}, 'shape': 'box', 'texture_color_list': ['brown'], 'visible': True, 'locationParent': None, 'explored': 0, 'id': '13273306-1afc-4dd0-830b-b90bf32516e3'}
+Agent data after end of exploration : x,y,rotation 2.07 0.25 0.0
+Goal object found status :  True
+Meta-Stage: 0
+{'action': 'FaceToFront'}
+Meta-Stage: 1
+{'action': 'GotoLocation', 'location': 'loc|-2.52|0.08|2.25'}
+Meta-Stage: 2
+{'action': 'FaceToObject', 'location': 'loc|-2.52|0.08|2.25', 'objectId': 'legal_13273306_1afc_4dd0_830b_b90bf32516e3'}
+Meta-Stage: 3
+{'action': 'PickupObject', 'objectId': 'legal_13273306_1afc_4dd0_830b_b90bf32516e3'}
+Pickup legal_13273306_1afc_4dd0_830b_b90bf32516e3 fail!
+Task Reward: 0
+
+Number tasks attempted 1
+Total Success 0

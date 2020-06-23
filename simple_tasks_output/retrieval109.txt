@@ -1,0 +1,35 @@
+CrashReporter: initialized
+Mono path[0] = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Resources/Data/Managed'
+Mono config path = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Mono/etc'
+/Users/rajesh/Rajesh/Subjects/Research/aiThor/interaction_scenes_divided/retrieval/retrieval_goal-0109.json
+type of event 2 :  <class 'machine_common_sense.mcs_step_output.MCS_Step_Output'>
+uuid :  1c93c57c-3a51-48e1-8f3e-71244be1f816
+uuid :  b0995b8a-0992-4d13-825d-06c7b7577dad
+84.65427959250192
+env step time 0.285
+uuid :  b0995b8a-0992-4d13-825d-06c7b7577dad_drawer_bottom
+uuid :  b0995b8a-0992-4d13-825d-06c7b7577dad_drawer_top
+uuid :  b0995b8a-0992-4d13-825d-06c7b7577dad_shelf_bottom
+uuid :  b0995b8a-0992-4d13-825d-06c7b7577dad_shelf_top
+env step time 0.288
+uuid :  b0995b8a-0992-4d13-825d-06c7b7577dad_shelf_middle
+env step time 0.293
+constructed action for open object OpenObject,objectId=1c93c57c-3a51-48e1-8f3e-71244be1f816
+opening failed
+constructed action for open object OpenObject,objectId=b0995b8a-0992-4d13-825d-06c7b7577dad
+opening failed
+{'uuid': '1c93c57c-3a51-48e1-8f3e-71244be1f816', 'color': {'r': 111, 'g': 80, 'b': 94}, 'dimensions': [{'x': -2.13610172, 'y': 0.0, 'z': -0.6574266}, {'x': -1.35828424, 'y': 0.0, 'z': -1.435244}, {'x': -0.7289592, 'y': 0.0, 'z': -0.8059187}, {'x': -1.50677693, 'y': 0.0, 'z': -0.028101325}, {'x': -2.13610172, 'y': 0.96, 'z': -0.6574266}, {'x': -1.35828424, 'y': 0.96, 'z': -1.435244}, {'x': -0.7289592, 'y': 0.96, 'z': -0.8059187}, {'x': -1.50677693, 'y': 0.96, 'z': -0.028101325}], 'direction': {'x': -0.893811643, 'y': 0.00274704443, 'z': 0.4484341}, 'distance': 13.089954, 'distance_in_steps': 13.089954, 'distance_in_world': 6.561298, 'held': False, 'mass': 0.0, 'material_list': [], 'position': {'x': -1.32251346, 'y': 0.4804564, 'z': -0.6187531}, 'rotation': {'x': 0.0, 'y': 225.0, 'z': 0.0}, 'shape': 'changing table', 'texture_color_list': ['red', 'yellow'], 'visible': True, 'explored': 1, 'locationParent': None, 'openable': False, 'id': '1c93c57c-3a51-48e1-8f3e-71244be1f816'}
+{'uuid': 'b0995b8a-0992-4d13-825d-06c7b7577dad', 'color': {'r': 30, 'g': 230, 'b': 50}, 'dimensions': [{'x': 0.337573528, 'y': 0.0, 'z': -1.77889824}, {'x': -0.44024384, 'y': 0.0, 'z': -2.55671573}, {'x': 0.1890812, 'y': 0.0, 'z': -3.18604088}, {'x': 0.9668986, 'y': 0.0, 'z': -2.40822315}, {'x': 0.337573528, 'y': 0.96, 'z': -1.77889824}, {'x': -0.44024384, 'y': 0.96, 'z': -2.55671573}, {'x': 0.1890812, 'y': 0.96, 'z': -3.18604088}, {'x': 0.9668986, 'y': 0.96, 'z': -2.40822315}], 'direction': {'x': -0.9743174, 'y': 0.00422207545, 'z': 0.22513935}, 'distance': 8.501958, 'distance_in_steps': 8.501958, 'distance_in_world': 4.276065, 'held': False, 'mass': 0.0, 'material_list': [], 'position': {'x': 0.376246929, 'y': 0.4804564, 'z': -2.59248662}, 'rotation': {'x': 0.0, 'y': 315.0, 'z': 0.0}, 'shape': 'changing table', 'texture_color_list': ['red', 'black'], 'visible': True, 'explored': 1, 'locationParent': None, 'openable': False, 'id': 'b0995b8a-0992-4d13-825d-06c7b7577dad'}
+{'uuid': 'b0995b8a-0992-4d13-825d-06c7b7577dad_drawer_bottom', 'color': {'r': 203, 'g': 255, 'b': 196}, 'dimensions': {}, 'direction': {'x': -0.527831733, 'y': -0.03479927, 'z': -0.8486358}, 'distance': 15.46255302, 'distance_in_steps': 15.46255302, 'distance_in_world': 7.745098, 'held': False, 'mass': 0.0, 'material_list': [], 'position': {'x': 0.5112122, 'y': 0.198781073, 'z': -2.48128533}, 'rotation': {'x': 0.0, 'y': 315.0, 'z': 0.0}, 'shape': 'drawer', 'texture_color_list': ['red', 'black'], 'visible': True, 'explored': 0, 'locationParent': None, 'id': 'b0995b8a-0992-4d13-825d-06c7b7577dad_drawer_bottom'}
+{'uuid': 'b0995b8a-0992-4d13-825d-06c7b7577dad_drawer_top', 'color': {'r': 6, 'g': 124, 'b': 226}, 'dimensions': {}, 'direction': {'x': -0.528150558, 'y': 0.00199603988, 'z': -0.8491484}, 'distance': 15.46255302, 'distance_in_steps': 15.46255302, 'distance_in_world': 7.745098, 'held': False, 'mass': 0.0, 'material_list': [], 'position': {'x': 0.5112122, 'y': 0.477617443, 'z': -2.48128533}, 'rotation': {'x': 0.0, 'y': 315.0, 'z': 0.0}, 'shape': 'drawer', 'texture_color_list': ['red', 'black'], 'visible': True, 'explored': 0, 'locationParent': None, 'id': 'b0995b8a-0992-4d13-825d-06c7b7577dad_drawer_top'}
+{'uuid': 'b0995b8a-0992-4d13-825d-06c7b7577dad_shelf_bottom', 'color': {'r': None, 'g': None, 'b': None}, 'dimensions': {}, 'direction': {'x': -0.533404946, 'y': -0.05971519, 'z': -0.843749464}, 'distance': 15.46255302, 'distance_in_steps': 15.46255302, 'distance_in_world': 7.745098, 'held': False, 'mass': 0.0, 'material_list': [], 'position': {'x': 0.38, 'y': 0.0, 'z': -2.585}, 'rotation': {'x': 0.0, 'y': 315.0, 'z': 0.0}, 'shape': 'shelf', 'texture_color_list': [], 'visible': True, 'explored': 0, 'locationParent': None, 'id': 'b0995b8a-0992-4d13-825d-06c7b7577dad_shelf_bottom'}
+{'uuid': 'b0995b8a-0992-4d13-825d-06c7b7577dad_shelf_top', 'color': {'r': None, 'g': None, 'b': None}, 'dimensions': {}, 'direction': {'x': -0.533404946, 'y': -0.05971519, 'z': -0.843749464}, 'distance': 15.46255302, 'distance_in_steps': 15.46255302, 'distance_in_world': 7.745098, 'held': False, 'mass': 0.0, 'material_list': [], 'position': {'x': 0.38, 'y': 0.0, 'z': -2.585}, 'rotation': {'x': 0.0, 'y': 315.0, 'z': 0.0}, 'shape': 'shelf', 'texture_color_list': [], 'visible': True, 'explored': 0, 'locationParent': None, 'id': 'b0995b8a-0992-4d13-825d-06c7b7577dad_shelf_top'}
+{'uuid': 'b0995b8a-0992-4d13-825d-06c7b7577dad_shelf_middle', 'color': {'r': None, 'g': None, 'b': None}, 'dimensions': {}, 'direction': {'x': -0.1918532, 'y': -0.138644323, 'z': -0.9715812}, 'distance': 6.607314, 'distance_in_steps': 6.607314, 'distance_in_world': 3.335874, 'held': False, 'mass': 0.0, 'material_list': [], 'position': {'x': 0.38, 'y': 0.0, 'z': -2.585}, 'rotation': {'x': 0.0, 'y': 315.0, 'z': 0.0}, 'shape': 'shelf', 'texture_color_list': [], 'visible': True, 'explored': 0, 'locationParent': None, 'id': 'b0995b8a-0992-4d13-825d-06c7b7577dad_shelf_middle'}
+Agent data after end of exploration : x,y,rotation 0.225433081 -1.49815512 172.0
+Goal object found status :  False
+Meta-Stage: 0
+{'action': 'End', 'value': 0}
+Task Reward: 0
+
+Number tasks attempted 1
+Total Success 0

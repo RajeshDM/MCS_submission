@@ -84,9 +84,6 @@ class GameState:
                         continue
                     if "openable" in obj and obj["openable"] == True:
                         receptacle_object_id = PlanParser.create_legal_object_name(obj['id'])
-                        if obj["type"] == "changing_table":
-                            print("Not support open changing table {}".format(receptacle_object_id))
-                            continue
                         self.object_containment_info[self.transfer_object_id].append(receptacle_object_id)
                         if "opened" in obj:
                             self.object_open_close_info[receptacle_object_id] = True

@@ -1,0 +1,25 @@
+CrashReporter: initialized
+Mono path[0] = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Resources/Data/Managed'
+Mono config path = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Mono/etc'
+/Users/rajesh/Rajesh/Subjects/Research/aiThor/interaction_scenes_divided/retrieval/retrieval_goal-0250.json
+type of event 2 :  <class 'machine_common_sense.mcs_step_output.MCS_Step_Output'>
+85.29493110230663
+env step time 0.281
+uuid :  30f4424b-8ca4-4cb8-82d5-4460528f55be
+{'uuid': '30f4424b-8ca4-4cb8-82d5-4460528f55be', 'color': {'r': 27, 'g': 187, 'b': 206}, 'dimensions': [{'x': 3.945243, 'y': -0.004270181, 'z': 2.308807}, {'x': 3.9452517, 'y': -0.004256904, 'z': 1.59657061}, {'x': 4.44842148, 'y': -0.00428123772, 'z': 1.59657693}, {'x': 4.44841242, 'y': -0.00429451466, 'z': 2.30881333}, {'x': 3.9452548, 'y': 0.245945573, 'z': 2.30881166}, {'x': 3.94526386, 'y': 0.24595885, 'z': 1.59657526}, {'x': 4.4484334, 'y': 0.245934531, 'z': 1.59658158}, {'x': 4.44842434, 'y': 0.245921254, 'z': 2.30881786}], 'direction': {'x': 0.9771554, 'y': -0.0441587232, 'z': 0.207887709}, 'distance': 17.108806, 'distance_in_steps': 17.108806, 'distance_in_world': 8.560495, 'held': False, 'mass': 0.5, 'material_list': ['PAPER'], 'position': {'x': 4.21213675, 'y': 0.07875548, 'z': 1.94500458}, 'rotation': {'x': -0.00276965415, 'y': 269.999268, 'z': -0.00106724643}, 'shape': 'box', 'texture_color_list': ['brown'], 'visible': True, 'explored': 0, 'locationParent': None, 'id': '30f4424b-8ca4-4cb8-82d5-4460528f55be'}
+Agent data after end of exploration : x,y,rotation -4.27945948 0.138435692 58.0
+Goal object found status :  True
+Meta-Stage: 0
+{'action': 'FaceToFront'}
+Meta-Stage: 1
+{'action': 'GotoLocation', 'location': 'loc|4.21|0.08|1.95'}
+Meta-Stage: 2
+{'action': 'FaceToObject', 'location': 'loc|4.21|0.08|1.95', 'objectId': 'legal_30f4424b_8ca4_4cb8_82d5_4460528f55be'}
+Meta-Stage: 3
+{'action': 'PickupObject', 'objectId': 'legal_30f4424b_8ca4_4cb8_82d5_4460528f55be'}
+Meta-Stage: 4
+{'action': 'End', 'value': 1}
+Task Reward: 1
+
+Number tasks attempted 1
+Total Success 1

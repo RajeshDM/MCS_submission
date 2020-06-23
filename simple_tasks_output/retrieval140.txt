@@ -1,0 +1,23 @@
+CrashReporter: initialized
+Mono path[0] = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Resources/Data/Managed'
+Mono config path = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Mono/etc'
+/Users/rajesh/Rajesh/Subjects/Research/aiThor/interaction_scenes_divided/retrieval/retrieval_goal-0140.json
+type of event 2 :  <class 'machine_common_sense.mcs_step_output.MCS_Step_Output'>
+uuid :  12edfe37-b1cf-454d-8ee4-8dbb30cb591d
+{'uuid': '12edfe37-b1cf-454d-8ee4-8dbb30cb591d', 'color': {'r': 178, 'g': 197, 'b': 24}, 'dimensions': [{'x': -3.422, 'y': 1.08731911e-07, 'z': -3.322}, {'x': -3.31799984, 'y': 1.04540959e-07, 'z': -3.322}, {'x': -3.31799984, 'y': 1.040753e-07, 'z': -3.218}, {'x': -3.422, 'y': 1.08266249e-07, 'z': -3.218}, {'x': -3.422, 'y': 0.104000106, 'z': -3.322}, {'x': -3.31799984, 'y': 0.104000106, 'z': -3.322}, {'x': -3.31799984, 'y': 0.104000106, 'z': -3.218}, {'x': -3.422, 'y': 0.104000106, 'z': -3.218}], 'direction': {'x': -0.946992636, 'y': -0.201409265, 'z': 0.250278443}, 'distance': 3.99249268, 'distance_in_steps': 3.99249268, 'distance_in_world': 2.04867268, 'held': False, 'mass': 0.66, 'material_list': ['WOOD'], 'position': {'x': -3.370102, 'y': 0.0520001054, 'z': -3.269898}, 'rotation': {'x': -1.977827e-07, 'y': 180.0, 'z': 2.27383725e-06}, 'shape': 'number block cube', 'texture_color_list': ['yellow', 'brown'], 'visible': True, 'explored': 0, 'locationParent': None, 'id': '12edfe37-b1cf-454d-8ee4-8dbb30cb591d'}
+Agent data after end of exploration : x,y,rotation -1.44 -3.78 270.0
+Goal object found status :  True
+Meta-Stage: 0
+{'action': 'FaceToFront'}
+Meta-Stage: 1
+{'action': 'GotoLocation', 'location': 'loc|-3.37|0.05|-3.27'}
+Meta-Stage: 2
+{'action': 'FaceToObject', 'location': 'loc|-3.37|0.05|-3.27', 'objectId': 'legal_12edfe37_b1cf_454d_8ee4_8dbb30cb591d'}
+Meta-Stage: 3
+{'action': 'PickupObject', 'objectId': 'legal_12edfe37_b1cf_454d_8ee4_8dbb30cb591d'}
+Meta-Stage: 4
+{'action': 'End', 'value': 1}
+Task Reward: 1
+
+Number tasks attempted 1
+Total Success 1

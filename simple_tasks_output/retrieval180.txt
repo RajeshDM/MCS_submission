@@ -1,0 +1,28 @@
+CrashReporter: initialized
+Mono path[0] = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Resources/Data/Managed'
+Mono config path = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Mono/etc'
+/Users/rajesh/Rajesh/Subjects/Research/aiThor/interaction_scenes_divided/retrieval/retrieval_goal-0180.json
+type of event 2 :  <class 'machine_common_sense.mcs_step_output.MCS_Step_Output'>
+uuid :  c752a046-5c3c-450a-8f1e-df1581488916
+uuid :  7893de2c-2f24-47fe-87f7-0bd6afa59791
+uuid :  ed29cddc-02b4-4b3b-bfde-3d0ce2eb6286
+79.83678383149599
+env step time 0.291
+uuid :  4c18e5b8-7ff3-4c0c-b1d0-6019c5a53c4e
+constructed action for open object OpenObject,objectId=ed29cddc-02b4-4b3b-bfde-3d0ce2eb6286
+constructed action for open object OpenObject,objectId=ed29cddc-02b4-4b3b-bfde-3d0ce2eb6286
+env step time 0.293
+constructed action for open object OpenObject,objectId=7893de2c-2f24-47fe-87f7-0bd6afa59791
+opening failed
+{'uuid': 'c752a046-5c3c-450a-8f1e-df1581488916', 'color': {'r': 130, 'g': 14, 'b': 238}, 'dimensions': [{'x': -0.1950002, 'y': 0.0, 'z': 2.005}, {'x': -0.194999963, 'y': 0.0, 'z': -0.495000243}, {'x': 0.9050002, 'y': 0.0, 'z': -0.495}, {'x': 0.905, 'y': 0.0, 'z': 2.005}, {'x': -0.1950002, 'y': 1.1, 'z': 2.005}, {'x': -0.194999963, 'y': 1.1, 'z': -0.495000243}, {'x': 0.9050002, 'y': 1.1, 'z': -0.495}, {'x': 0.905, 'y': 1.1, 'z': 2.005}], 'direction': {'x': 0.977693558, 'y': 0.0280417334, 'z': -0.2081562}, 'distance': 7.79659558, 'distance_in_steps': 7.79659558, 'distance_in_world': 3.92563772, 'held': False, 'mass': 0.0, 'material_list': [], 'position': {'x': 0.412340134, 'y': 0.5741382, 'z': 0.7513}, 'rotation': {'x': 0.0, 'y': 270.0, 'z': 0.0}, 'shape': 'sofa', 'texture_color_list': ['brown'], 'visible': True, 'explored': 1, 'locationParent': None, 'id': 'c752a046-5c3c-450a-8f1e-df1581488916'}
+{'uuid': '7893de2c-2f24-47fe-87f7-0bd6afa59791', 'color': {'r': 6, 'g': 103, 'b': 227}, 'dimensions': [{'x': -4.32, 'y': 2.530869e-07, 'z': -4.286461}, {'x': -4.39353943, 'y': 2.26078555e-07, 'z': -4.36}, {'x': -4.32, 'y': 2.279412e-07, 'z': -4.43353939}, {'x': -4.246461, 'y': 2.54949555e-07, 'z': -4.36}, {'x': -4.32, 'y': 0.104000255, 'z': -4.286461}, {'x': -4.39353943, 'y': 0.104000226, 'z': -4.36}, {'x': -4.32, 'y': 0.104000226, 'z': -4.43353939}, {'x': -4.246461, 'y': 0.104000255, 'z': -4.36}], 'direction': {'x': -0.139670819, 'y': -0.06826749, 'z': -0.987841964}, 'distance': 11.9982, 'distance_in_steps': 11.9982, 'distance_in_world': 6.01674843, 'held': False, 'mass': 0.66, 'material_list': ['WOOD'], 'position': {'x': -4.31985569, 'y': 0.05200024, 'z': -4.36}, 'rotation': {'x': 1.1067076e-06, 'y': 314.999939, 'z': 1.499686e-05}, 'shape': 'number block cube', 'texture_color_list': ['blue', 'brown'], 'visible': True, 'explored': 1, 'locationParent': None, 'openable': False, 'id': '7893de2c-2f24-47fe-87f7-0bd6afa59791'}
+{'uuid': 'ed29cddc-02b4-4b3b-bfde-3d0ce2eb6286', 'color': {'r': 205, 'g': 52, 'b': 192}, 'dimensions': [{'x': -3.15876532, 'y': -0.00595216453, 'z': -3.6853385}, {'x': -3.709323, 'y': -0.005933225, 'z': -3.13477039}, {'x': -4.21021175, 'y': -0.0059145987, 'z': -3.63564944}, {'x': -3.65965414, 'y': -0.005933538, 'z': -4.18621731}, {'x': -3.15874839, 'y': 0.4701724, 'z': -3.68533778}, {'x': -3.70930576, 'y': 0.47019136, 'z': -3.13476968}, {'x': -4.21019459, 'y': 0.47021, 'z': -3.63564873}, {'x': -3.659637, 'y': 0.470191061, 'z': -4.186217}], 'direction': {'x': -0.0378195867, 'y': -0.0621722527, 'z': -0.997348666}, 'distance': 10.24099254, 'distance_in_steps': 10.24099254, 'distance_in_world': 5.12565565, 'held': False, 'mass': 1.0, 'material_list': ['PAPER'], 'position': {'x': -3.67900515, 'y': 0.135352165, 'z': -3.66800785}, 'rotation': {'x': 0.00150683732, 'y': 45.00055, 'z': -0.00139412424}, 'shape': 'box', 'texture_color_list': ['brown'], 'visible': True, 'explored': 1, 'locationParent': None, 'opened': True, 'openable': True, 'id': 'ed29cddc-02b4-4b3b-bfde-3d0ce2eb6286'}
+{'uuid': '4c18e5b8-7ff3-4c0c-b1d0-6019c5a53c4e', 'color': {'r': 203, 'g': 86, 'b': 69}, 'dimensions': [{'x': 2.120107, 'y': -0.00356298685, 'z': 0.7498237}, {'x': 2.1201067, 'y': -0.00356158614, 'z': 1.21699166}, {'x': 1.69509244, 'y': -0.00355672836, 'z': 1.21699119}, {'x': 1.69509292, 'y': -0.003558129, 'z': 0.7498232}, {'x': 2.12011027, 'y': 0.282111764, 'z': 0.7498228}, {'x': 2.1201098, 'y': 0.282113165, 'z': 1.21699071}, {'x': 1.69509578, 'y': 0.282118022, 'z': 1.21699035}, {'x': 1.69509625, 'y': 0.282116622, 'z': 0.7498224}], 'direction': {'x': 0.557162046, 'y': -0.0607530549, 'z': 0.8281784}, 'distance': 12.651486, 'distance_in_steps': 12.651486, 'distance_in_world': 6.33398151, 'held': False, 'mass': 0.25, 'material_list': ['PAPER'], 'position': {'x': 1.90673721, 'y': 0.08121157, 'z': 0.977894962}, 'rotation': {'x': 0.0006553486, 'y': 89.99995, 'z': -0.000173016}, 'shape': 'box', 'texture_color_list': ['brown'], 'visible': True, 'explored': 1, 'locationParent': None, 'id': '4c18e5b8-7ff3-4c0c-b1d0-6019c5a53c4e'}
+Agent data after end of exploration : x,y,rotation -3.55784678 -4.21730852 52.99997
+Goal object found status :  False
+Meta-Stage: 0
+{'action': 'End', 'value': 0}
+Task Reward: 0
+
+Number tasks attempted 1
+Total Success 0

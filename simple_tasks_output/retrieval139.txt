@@ -1,0 +1,23 @@
+CrashReporter: initialized
+Mono path[0] = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Resources/Data/Managed'
+Mono config path = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Mono/etc'
+/Users/rajesh/Rajesh/Subjects/Research/aiThor/interaction_scenes_divided/retrieval/retrieval_goal-0139.json
+type of event 2 :  <class 'machine_common_sense.mcs_step_output.MCS_Step_Output'>
+uuid :  a1bc0e0d-8cfc-4d39-86fe-8fd10c99c224
+{'uuid': 'a1bc0e0d-8cfc-4d39-86fe-8fd10c99c224', 'color': {'r': 153, 'g': 30, 'b': 51}, 'dimensions': [{'x': 0.114999965, 'y': 2.98023224e-08, 'z': -4.135}, {'x': 0.114999995, 'y': 2.98023224e-08, 'z': -4.385}, {'x': 0.365, 'y': 2.98023224e-08, 'z': -4.385}, {'x': 0.365, 'y': 2.98023224e-08, 'z': -4.135}, {'x': 0.114999965, 'y': 0.25000003, 'z': -4.135}, {'x': 0.114999995, 'y': 0.25000003, 'z': -4.385}, {'x': 0.365, 'y': 0.25000003, 'z': -4.385}, {'x': 0.365, 'y': 0.25000003, 'z': -4.135}], 'direction': {'x': -0.26321438, 'y': -0.0374830626, 'z': -0.9640089}, 'distance': 17.995478, 'distance_in_steps': 17.995478, 'distance_in_world': 9.004066, 'held': False, 'mass': 4.0, 'material_list': ['METAL'], 'position': {'x': 0.24, 'y': 0.12500003, 'z': -4.26}, 'rotation': {'x': 0.0, 'y': 270.0, 'z': 0.0}, 'shape': 'ball', 'texture_color_list': ['grey'], 'visible': True, 'explored': 0, 'locationParent': None, 'id': 'a1bc0e0d-8cfc-4d39-86fe-8fd10c99c224'}
+Agent data after end of exploration : x,y,rotation 2.61 4.42 180.0
+Goal object found status :  True
+Meta-Stage: 0
+{'action': 'FaceToFront'}
+Meta-Stage: 1
+{'action': 'GotoLocation', 'location': 'loc|0.24|0.13|-4.26'}
+Meta-Stage: 2
+{'action': 'FaceToObject', 'location': 'loc|0.24|0.13|-4.26', 'objectId': 'legal_a1bc0e0d_8cfc_4d39_86fe_8fd10c99c224'}
+Meta-Stage: 3
+{'action': 'PickupObject', 'objectId': 'legal_a1bc0e0d_8cfc_4d39_86fe_8fd10c99c224'}
+Meta-Stage: 4
+{'action': 'End', 'value': 1}
+Task Reward: 1
+
+Number tasks attempted 1
+Total Success 1

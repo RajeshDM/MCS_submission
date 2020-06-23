@@ -1,0 +1,23 @@
+CrashReporter: initialized
+Mono path[0] = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Resources/Data/Managed'
+Mono config path = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Mono/etc'
+/Users/rajesh/Rajesh/Subjects/Research/aiThor/interaction_scenes_divided/retrieval/retrieval_goal-0211.json
+type of event 2 :  <class 'machine_common_sense.mcs_step_output.MCS_Step_Output'>
+uuid :  e6fee0dd-bacb-4508-b23b-ac19a7a3e7d7
+{'uuid': 'e6fee0dd-bacb-4508-b23b-ac19a7a3e7d7', 'color': {'r': 132, 'g': 216, 'b': 103}, 'dimensions': [{'x': 4.32071066, 'y': -7.450581e-09, 'z': 2.35}, {'x': 4.25, 'y': -7.450581e-09, 'z': 2.42071056}, {'x': 4.17928934, 'y': -7.450581e-09, 'z': 2.35}, {'x': 4.25, 'y': -7.450581e-09, 'z': 2.27928925}, {'x': 4.32071066, 'y': 0.099999994, 'z': 2.35}, {'x': 4.25, 'y': 0.099999994, 'z': 2.42071056}, {'x': 4.17928934, 'y': 0.099999994, 'z': 2.35}, {'x': 4.25, 'y': 0.099999994, 'z': 2.27928925}], 'direction': {'x': 0.9378834, 'y': -0.0615066662, 'z': -0.341455162}, 'distance': 13.387786, 'distance_in_steps': 13.387786, 'distance_in_world': 6.70659065, 'held': False, 'mass': 0.5, 'material_list': ['WOOD'], 'position': {'x': 4.25, 'y': 0.0499999933, 'z': 2.35}, 'rotation': {'x': 0.0, 'y': 45.0000038, 'z': 0.0}, 'shape': 'ball', 'texture_color_list': ['brown'], 'visible': True, 'explored': 0, 'locationParent': None, 'id': 'e6fee0dd-bacb-4508-b23b-ac19a7a3e7d7'}
+Agent data after end of exploration : x,y,rotation -2.04 4.64 90.0
+Goal object found status :  True
+Meta-Stage: 0
+{'action': 'FaceToFront'}
+Meta-Stage: 1
+{'action': 'GotoLocation', 'location': 'loc|4.25|0.05|2.35'}
+Meta-Stage: 2
+{'action': 'FaceToObject', 'location': 'loc|4.25|0.05|2.35', 'objectId': 'legal_e6fee0dd_bacb_4508_b23b_ac19a7a3e7d7'}
+Meta-Stage: 3
+{'action': 'PickupObject', 'objectId': 'legal_e6fee0dd_bacb_4508_b23b_ac19a7a3e7d7'}
+Meta-Stage: 4
+{'action': 'End', 'value': 1}
+Task Reward: 1
+
+Number tasks attempted 1
+Total Success 1

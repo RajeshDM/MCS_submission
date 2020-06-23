@@ -1,0 +1,33 @@
+CrashReporter: initialized
+Mono path[0] = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Resources/Data/Managed'
+Mono config path = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Mono/etc'
+/Users/rajesh/Rajesh/Subjects/Research/aiThor/interaction_scenes_divided/retrieval/retrieval_goal-0185.json
+uuid :  0f8b6bff-73e3-4941-9a1f-e58173a5b407
+type of event 2 :  <class 'machine_common_sense.mcs_step_output.MCS_Step_Output'>
+uuid :  a48957d5-78ef-4584-91b5-f9c85f388a41
+77.50469244794911
+env step time 0.316
+constructed action for open object OpenObject,objectId=a48957d5-78ef-4584-91b5-f9c85f388a41
+opening failed
+env step time 0.313
+constructed action for open object OpenObject,objectId=0f8b6bff-73e3-4941-9a1f-e58173a5b407
+uuid :  97362f42-6811-4f0d-8cec-96844f988a33
+{'uuid': '0f8b6bff-73e3-4941-9a1f-e58173a5b407', 'color': {'r': 235, 'g': 105, 'b': 230}, 'dimensions': [{'x': -2.32154465, 'y': -0.003309995, 'z': -2.44476271}, {'x': -1.54293144, 'y': -0.00328998268, 'z': -2.44476271}, {'x': -1.54293144, 'y': -0.00328159332, 'z': -1.73640585}, {'x': -2.32154465, 'y': -0.00330160558, 'z': -1.73640585}, {'x': -2.321552, 'y': 0.282364756, 'z': -2.444766}, {'x': -1.54293883, 'y': 0.282384753, 'z': -2.444766}, {'x': -1.54293871, 'y': 0.282393157, 'z': -1.73640919}, {'x': -2.321552, 'y': 0.28237313, 'z': -1.73640919}], 'direction': {'x': -0.8737265, 'y': -0.119690813, 'z': 0.471461535}, 'distance': 6.157196, 'distance_in_steps': 6.157196, 'distance_in_world': 3.095463, 'held': False, 'mass': 0.5, 'material_list': ['PAPER'], 'position': {'x': -1.94142723, 'y': 0.08147543, 'z': -2.089146}, 'rotation': {'x': 0.0006782965, 'y': 180.0, 'z': -0.00147209119}, 'shape': 'box', 'texture_color_list': ['brown'], 'visible': True, 'locationParent': None, 'explored': 1, 'opened': True, 'openable': True, 'id': '0f8b6bff-73e3-4941-9a1f-e58173a5b407'}
+{'uuid': 'a48957d5-78ef-4584-91b5-f9c85f388a41', 'color': {'r': 181, 'g': 105, 'b': 170}, 'dimensions': [{'x': -0.381827235, 'y': 0.0, 'z': 1.54428935}, {'x': -1.30106592, 'y': 0.0, 'z': 2.46352816}, {'x': -2.07888341, 'y': 0.0, 'z': 1.68571067}, {'x': -1.15964472, 'y': 0.0, 'z': 0.766471863}, {'x': -0.381827235, 'y': 1.1, 'z': 1.54428935}, {'x': -1.30106592, 'y': 1.1, 'z': 2.46352816}, {'x': -2.07888341, 'y': 1.1, 'z': 1.68571067}, {'x': -1.15964472, 'y': 1.1, 'z': 0.766471863}], 'direction': {'x': -0.378513724, 'y': 0.0199934747, 'z': 0.9253797}, 'distance': 11.17734336, 'distance_in_steps': 11.17734336, 'distance_in_world': 5.607776, 'held': False, 'mass': 0.0, 'material_list': [], 'position': {'x': -1.2735194, 'y': 0.5741382, 'z': 1.57707286}, 'rotation': {'x': 0.0, 'y': 45.0000038, 'z': 0.0}, 'shape': 'sofa chair', 'texture_color_list': ['black'], 'visible': True, 'explored': 1, 'locationParent': None, 'openable': False, 'id': 'a48957d5-78ef-4584-91b5-f9c85f388a41'}
+{'uuid': '97362f42-6811-4f0d-8cec-96844f988a33', 'color': {'r': 222, 'g': 76, 'b': 35}, 'dimensions': [{'x': -2.04720855, 'y': 0.009856716, 'z': -2.19197464}, {'x': -1.83776641, 'y': 0.009856766, 'z': -2.191974}, {'x': -1.83776712, 'y': 0.009860199, 'z': -1.9863497}, {'x': -2.04720926, 'y': 0.009860149, 'z': -1.98635042}, {'x': -2.04720855, 'y': 0.06929757, 'z': -2.19197559}, {'x': -1.83776641, 'y': 0.06929762, 'z': -2.19197488}, {'x': -1.83776712, 'y': 0.0693010539, 'z': -1.98635077}, {'x': -2.04720926, 'y': 0.069301, 'z': -1.98635149}], 'direction': {'x': 0.551234365, 'y': -0.441813618, 'z': -0.7077722}, 'distance': 1.702588678, 'distance_in_steps': 1.702588678, 'distance_in_world': 0.96293366, 'held': False, 'mass': 0.25, 'material_list': ['PLASTIC'], 'position': {'x': -1.941249, 'y': 0.04324825, 'z': -2.08875132}, 'rotation': {'x': 0.000956414, 'y': 179.9998, 'z': -1.38428213e-05}, 'shape': 'bowl', 'texture_color_list': ['orange'], 'visible': True, 'explored': 0, 'locationParent': '0f8b6bff-73e3-4941-9a1f-e58173a5b407', 'agent_position': {'x': -2.46433377, 'y': 0.4625, 'z': -1.4171226}, 'agent_tilt': 24.0000324, 'agent_rotation': 143.0, 'id': '97362f42-6811-4f0d-8cec-96844f988a33'}
+Agent data after end of exploration : x,y,rotation -2.46433377 -1.4171226 143.0
+Goal object found status :  True
+Meta-Stage: 0
+{'action': 'FaceToFront'}
+Meta-Stage: 1
+{'action': 'GotoLocation', 'location': 'loc|-1.94|0.04|-2.09'}
+Meta-Stage: 2
+{'action': 'FaceToObject', 'location': 'loc|-1.94|0.04|-2.09', 'objectId': 'legal_97362f42_6811_4f0d_8cec_96844f988a33'}
+Meta-Stage: 3
+{'action': 'PickupObject', 'objectId': 'legal_97362f42_6811_4f0d_8cec_96844f988a33'}
+Meta-Stage: 4
+{'action': 'End', 'value': 1}
+Task Reward: 1
+
+Number tasks attempted 1
+Total Success 1

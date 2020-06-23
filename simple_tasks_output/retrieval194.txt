@@ -1,0 +1,25 @@
+CrashReporter: initialized
+Mono path[0] = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Resources/Data/Managed'
+Mono config path = '/Users/rajesh/Rajesh/Subjects/Research/aiThor/mcs_playroom_old/algorithms/a3c/gym_ai2thor/MCSai2thor.app/Contents/Mono/etc'
+/Users/rajesh/Rajesh/Subjects/Research/aiThor/interaction_scenes_divided/retrieval/retrieval_goal-0194.json
+type of event 2 :  <class 'machine_common_sense.mcs_step_output.MCS_Step_Output'>
+uuid :  bca79e84-9b3b-4368-a1b7-d770e8ee2f00
+uuid :  f30498b0-758a-46ca-b75a-681facbdcaf0
+{'uuid': 'bca79e84-9b3b-4368-a1b7-d770e8ee2f00', 'color': {'r': 26, 'g': 164, 'b': 66}, 'dimensions': [{'x': -2.8370223, 'y': -0.00428409874, 'z': -3.7327745}, {'x': -3.08883762, 'y': -0.004276514, 'z': -3.48096275}, {'x': -3.26673365, 'y': -0.004274398, 'z': -3.65886116}, {'x': -3.01491833, 'y': -0.004281983, 'z': -3.910673}, {'x': -2.837017, 'y': 0.245931685, 'z': -3.73277688}, {'x': -3.08883238, 'y': 0.245939255, 'z': -3.480965}, {'x': -3.2667284, 'y': 0.245941371, 'z': -3.65886354}, {'x': -3.014913, 'y': 0.245933786, 'z': -3.91067529}], 'direction': {'x': -0.33479178, 'y': -0.05537724, 'z': -0.9406635}, 'distance': 13.720688, 'distance_in_steps': 13.720688, 'distance_in_world': 6.86793947, 'held': False, 'mass': 0.25, 'material_list': ['PAPER'], 'position': {'x': -3.06000447, 'y': 0.078752704, 'z': -3.69851}, 'rotation': {'x': 0.000480782328, 'y': 44.99961, 'z': -0.00122052943}, 'shape': 'box', 'texture_color_list': ['brown'], 'visible': True, 'explored': 0, 'locationParent': None, 'id': 'bca79e84-9b3b-4368-a1b7-d770e8ee2f00'}
+{'uuid': 'f30498b0-758a-46ca-b75a-681facbdcaf0', 'color': {'r': 65, 'g': 188, 'b': 204}, 'dimensions': [{'x': -3.40644431, 'y': -1.86264515e-08, 'z': -4.115655}, {'x': -3.477155, 'y': -1.86264515e-08, 'z': -4.04494429}, {'x': -3.54786563, 'y': -1.86264515e-08, 'z': -4.115655}, {'x': -3.477155, 'y': -1.86264515e-08, 'z': -4.1863656}, {'x': -3.40644431, 'y': 0.09999998, 'z': -4.115655}, {'x': -3.477155, 'y': 0.09999998, 'z': -4.04494429}, {'x': -3.54786563, 'y': 0.09999998, 'z': -4.115655}, {'x': -3.477155, 'y': 0.09999998, 'z': -4.1863656}], 'direction': {'x': -0.366536021, 'y': -0.05523842, 'z': -0.9287626}, 'distance': 14.912454, 'distance_in_steps': 14.912454, 'distance_in_world': 7.467629, 'held': False, 'mass': 0.25, 'material_list': ['PLASTIC'], 'position': {'x': -3.477155, 'y': 0.0499999821, 'z': -4.115655}, 'rotation': {'x': 0.0, 'y': 45.0000038, 'z': 0.0}, 'shape': 'ball', 'texture_color_list': ['black'], 'visible': True, 'explored': 0, 'locationParent': None, 'id': 'f30498b0-758a-46ca-b75a-681facbdcaf0'}
+Agent data after end of exploration : x,y,rotation -0.74 2.82 180.0
+Goal object found status :  True
+Meta-Stage: 0
+{'action': 'FaceToFront'}
+Meta-Stage: 1
+{'action': 'GotoLocation', 'location': 'loc|-3.48|0.05|-4.12'}
+Meta-Stage: 2
+{'action': 'FaceToObject', 'location': 'loc|-3.48|0.05|-4.12', 'objectId': 'legal_f30498b0_758a_46ca_b75a_681facbdcaf0'}
+Meta-Stage: 3
+{'action': 'PickupObject', 'objectId': 'legal_f30498b0_758a_46ca_b75a_681facbdcaf0'}
+Meta-Stage: 4
+{'action': 'End', 'value': 1}
+Task Reward: 1
+
+Number tasks attempted 1
+Total Success 1
