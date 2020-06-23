@@ -72,6 +72,7 @@ def explore_scene(sequence_generator,event, scene_type=None, scene_number=None):
     config_data['obstacles'] = sequence_generator.agent.nav.scene_obstacles_dict
 
     print ("Agent data after end of exploration : x,y,rotation", config_data['performerStart']['position']['x'], config_data['performerStart']['position']['z'], config_data['performerStart']['rotation']['y'] )
+    print ("Goal object found status : ", sequence_generator.agent.game_state.goals_found)
 
     return config_data
 
@@ -92,7 +93,7 @@ def explore_all_scenes():
 
     #scene_numbers = ['0933','0934','0935']
     #scene_numbers = ['0058']#,'0934','0935']
-    scene_numbers = ['0002']
+    scene_numbers = ['0007']
     #scene_numbers = create_scene_numbers('0100', '0201')
     print (scene_numbers)
     #exit()

@@ -210,6 +210,10 @@ class BoundingBoxNavigator:
 									self.scene_obstacles_dict.values())
 
 			self.current_nav_steps += 1
+
+			if agent.game_state.goals_found == True:
+				return
+
 		return True
 
 

@@ -396,6 +396,7 @@ class GameState(object):
                 self.discovered_objects.append(obj.__dict__)
                 self.new_object_found = True
                 self.new_found_objects.append(obj.__dict__)
+                self.discovered_objects[-1]['explored'] = 0
 
         self.add_obstacle_func(self.event)
         self.number_actions += 1
