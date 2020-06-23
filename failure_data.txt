@@ -1,4 +1,0 @@
-scene,0,reward,1
-scene,1,reward,1
-scene,56,reward,1
-scene,54,reward,1
