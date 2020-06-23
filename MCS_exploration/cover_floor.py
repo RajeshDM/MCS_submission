@@ -393,8 +393,8 @@ def update_seen(x,y,game_state,rotation,camera_field_of_view,obstacles):
 
         #for i in range(len(obstacles)):
         #    obstacles[i].plot("-k")
-        for obstacle in obstacles:
-            obstacle.plot("-g")
+        #for obstacle in obstacles:
+        #    obstacle.plot("-g")
 
         plt.axis("equal")
         plt.pause(1)
@@ -465,7 +465,7 @@ def get_point_between_points(p1, p2, radius):
 
     distance_ratio = -0.1
     distance_new_point = 0
-    while (distance_new_point < 1.2 * radius):
+    while (distance_new_point < 1.6 * radius):
         x = p1[0] + distance_ratio * (p2[0] - p1[0])
         y = p1[1] + distance_ratio * (p2[1] - p1[1])
         new_pt = [x,y]

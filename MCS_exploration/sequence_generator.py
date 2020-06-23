@@ -204,7 +204,7 @@ class SequenceGenerator(object):
 
         #z = 0
 
-        while overall_area * 0.6 >  self.agent.game_state.world_poly.area :
+        while overall_area * 0.65 >  self.agent.game_state.world_poly.area :
             points_checked = 0
             #z+=1
             max_visible_position = []
@@ -277,24 +277,29 @@ class SequenceGenerator(object):
             flag = 0
             for object in self.agent.game_state.discovered_objects :
                 #distance_to_object =
-                if object['explored'] == 0 :
+                if object['explored'] == 0  and object['locationParent'] == None and len(object['dimensions']) >0:
                     flag = 1
                     distance_to_object = math.sqrt( (current_pos['x'] - object['position']['x'] )** 2 + (current_pos['z']-object['position']['z'])**2)
+                else :
+                    continue
 
                 if distance_to_object < min_distance:
                     min_distance_obj_id = object['uuid']
                     min_distance = distance_to_object
 
-                self.explore_object(min_distance_obj_id)
-                if self.agent.game_state.goals_found :
-                    return
-                if self.agent.game_state.number_actions > 700 :
-                    print ("Too many actions performed")
-                    return
             if flag == 0 :
                 all_explored = True
+                break
+            self.explore_object(min_distance_obj_id)
+            action = {'action':'RotateLook', 'horizon':-(self.agent.game_state.event.head_tilt)}
+            self.agent.step(action)
+            if self.agent.game_state.goals_found :
+                return
+            if self.agent.game_state.number_actions > 700 :
+                print ("Too many actions performed")
+                return
 
-        self.explore_object(self.agent.game_state.discovered_objects[0])
+        #self.explore_object(self.agent.game_state.discovered_objects[0])
 
     def explore_object(self, object_id_to_search):
         uuid = object_id_to_search
@@ -329,7 +334,7 @@ class SequenceGenerator(object):
 
         goal_poses = sorted(goal_poses, key = lambda x: x[1])
 
-        for goal_pose in goal_poses:
+        for goal_pose in goal_poses[:-2]:
             goal_pose_loc = goal_pose[0]
             goal_pose_x_z =(goal_pose_loc[0],goal_pose_loc[2])
             goal_pose_x_z = cover_floor.get_point_between_points(goal_pose_x_z,[goal_object_centre[0],goal_object_centre[2]],self.agent.nav_radius)
@@ -352,7 +357,7 @@ class SequenceGenerator(object):
 
             theta = NavigatorResNet.get_polar_direction(goal_object_centre, self.agent.game_state.event)
             omega = FaceTurnerResNet.get_head_tilt(goal_object_centre, self.agent.game_state.event) - self.agent.game_state.event.head_tilt
-            action = {'action':'RotateLook', 'rotation':theta, 'horizon':omega}
+            action = {'action':'RotateLook', 'rotation':-theta*180/math.pi, 'horizon':omega}
             self.agent.step(action)
 
             object_visible = False
