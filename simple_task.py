@@ -40,7 +40,7 @@ if __name__ == "__main__":
         result_total += env.step_output.reward
         sys.stdout.flush()
         number_tasks_attempted +=1
-        f.write("scene,"+str(env.current_scene)+ ",reward,"+str(env.step_output.reward)+"\n")
+        #f.write("scene,"+str(env.current_scene)+ ",reward,"+str(env.step_output.reward)+"\n")
 
     print ("Number tasks attempted" , number_tasks_attempted)
     print ("Total Success", result_total)

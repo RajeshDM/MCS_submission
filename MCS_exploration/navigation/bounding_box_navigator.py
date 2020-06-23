@@ -1,5 +1,5 @@
 #from tasks.bonding_box_navigation_mcs.visibility_road_map import ObstaclePolygon,IncrementalVisibilityRoadMap
-from MCS_exploration.navigation.visibility_road_map import VisibilityRoadMap,ObstaclePolygon,IncrementalVisibilityRoadMap
+from MCS_exploration.navigation.visibility_road_map import ObstaclePolygon,IncrementalVisibilityRoadMap
 import random
 import math
 import matplotlib.pyplot as plt
@@ -35,7 +35,6 @@ class BoundingBoxNavigator:
 		except ValueError:
 			return None,None
 
-		#print(i)
 		# execute a small step along that plan by
 		# turning to face the first waypoint
 		if len(pathX) == 1 and len(pathY) == 1:
@@ -113,9 +112,9 @@ class BoundingBoxNavigator:
 
 			for obstacle_key, obstacle in self.scene_obstacles_dict.items():
 				if self.scene_obstacles_dict_roadmap[obstacle_key] == 0:
-					print ("not added obstacle", self.current_nav_steps)
+					#print ("not added obstacle", self.current_nav_steps)
 					if not obstacle.contains_goal((gx, gy)) :
-						print ("adding new obstacles ", self.current_nav_steps)
+						#print ("adding new obstacles ", self.current_nav_steps)
 						self.scene_obstacles_dict_roadmap[obstacle_key] =1
 						roadmap.addObstacle(obstacle)
 			if dis_to_goal < self.epsilon:

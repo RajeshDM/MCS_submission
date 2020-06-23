@@ -1,8 +1,6 @@
 from planner.ff_planner_handler import PlanParser
 from collections import defaultdict
-from copy import deepcopy
-import json
-import os
+
 
 class GameState:
 
@@ -47,8 +45,6 @@ class GameState:
             self.goal_predicate_list = []
             if self.goal_category == "traversal":
                 self.goal_object_id = PlanParser.create_legal_object_name(config['goal']['metadata']['target']['id'])
-                #if self.goal_object_id not in self.object_loc_info :
-                #    return
                 agent_final_loc = PlanParser.replace_digital_number(
                     "loc|{:.2f}|{:.2f}|{:.2f}".format(
                         self.object_loc_info[self.goal_object_id][0],
@@ -61,15 +57,11 @@ class GameState:
                 )
             elif self.goal_category == "retrieval":
                 self.goal_object_id = PlanParser.create_legal_object_name(config['goal']['metadata']['target']['id'])
-                # del self.object_loc_info[self.goal_object_id]
                 for obj in config['objects']:
                     if obj['id'] == self.goal_object_id:
                         continue
                     if "openable" in obj and obj["openable"] == True:
                         receptacle_object_id = PlanParser.create_legal_object_name(obj['id'])
-                        if obj["type"] == "changing_table":
-                            continue
-                        self.object_containment_info[self.goal_object_id].append(receptacle_object_id)
                         if "opened" in obj:
                             self.object_open_close_info[receptacle_object_id] = True
                         else:
