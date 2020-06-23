@@ -1,3 +1,4 @@
+'''
 from game_state import QuestionGameState
 
 
@@ -28,4 +29,4 @@ class QAAgent(object):
 
     def draw_state(self):
         raise NotImplementedError
-
+'''

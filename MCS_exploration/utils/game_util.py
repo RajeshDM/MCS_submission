@@ -3,7 +3,7 @@ import pdb
 import numpy as np
 import cv2
 from ai2thor import controller
-from utils import bb_util
+#from utils import bb_util
 from machine_common_sense import MCS
 import machine_common_sense
 import math
@@ -441,7 +441,7 @@ def get_question_str(question_type_ind, question_object_ind, question_container_
             container_article,
             constants.OBJECTS_SINGULAR[question_container_ind]))
 
-
+'''
 def set_open_close_object(action, last_event):
     # The object nearest the center of the screen is open/closed if none is provided.
     if 'objectId' not in action:
@@ -461,3 +461,4 @@ def set_open_close_object(action, last_event):
             # Nothing to open
             action['objectId'] = ''
     return action
+'''

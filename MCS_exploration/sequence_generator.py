@@ -1,6 +1,6 @@
 import numpy as np
 import random
-from utils import drawing
+#from utils import drawing
 from qa_agents import graph_agent
 #import graph_agent
 
@@ -17,18 +17,9 @@ from tasks.point_goal_navigation.navigator import NavigatorResNet
 from tasks.search_object_in_receptacle.face_turner import FaceTurnerResNet
 
 
-#from navigation.bounding_box_navigator import BoundingBoxNavigator, SHOW_ANIMATION
-#from navigation.visibility_road_map import ObstaclePolygon
-from navigation import bounding_box_navigator
-#import navigation
-from navigation.visibility_road_map import ObstaclePolygon
-import matplotlib.pyplot as pl
-
-import machine_common_sense
-
 class SequenceGenerator(object):
-    def __init__(self, sess,env):
-        self.agent = graph_agent.GraphAgent(sess,env, reuse=True)
+    def __init__(self,sess, env):
+        self.agent = graph_agent.GraphAgent(env, reuse=True)
         self.game_state = self.agent.game_state
         self.action_util = self.game_state.action_util
         self.planner_prob = 0.5
@@ -58,24 +49,10 @@ class SequenceGenerator(object):
         exploration_routine = cover_floor.flood_fill(0,0, cover_floor.check_validity)        
         #print (exploration_routine, len(exploration_routine))
         pose = game_util.get_pose(self.game_state.event)[:3]
-        #unexplored = get_unseen(self.graph.graph)
-        #print (len(unexplored))
-        #print (unexplored)
-
-        #self.event = self.game_state.event
-        #visible_points = get_visible_points(pose[0],pose[1],pose[2],self.event.camera_field_of_view,self.event.camera_clipping_planes[1] )
-        #print ("visible points = " , visible_points)
-        #print (len(visible_points))
-
-        #number_visible_points = points_visible_from_position(exploration_routine[10][0],exploration_routine[10][1], self.event.camera_field_of_view,self.event.camera_clipping_planes[1] )  
-        #print ("number of visible points = ", number_visible_points)
 
         self.graph.update_seen(self.event.position['x'],self.event.position['z'],self.event.rotation,100,self.event.camera_field_of_view,self.agent.nav.scene_obstacles_dict )
         unexplored = self.graph.get_unseen()
         print ("before explore point ", len(unexplored))
-        #print (unexplored)
-        #return
-        #self.graph.explore_point(self.event.position['x'],self.event.position['z'],self.agent , 42.5, self.agent.nav.scene_obstacles_dict)
 
         unexplored = self.graph.get_unseen()
         print ("after explore point", len(unexplored))
@@ -94,7 +71,6 @@ class SequenceGenerator(object):
             start_time = time.time()
             print (exploration_routine)
             min_distance = 20
-            '''
             while (len(max_visible_position) == 0):
                 for elem in exploration_routine:
                     #number_visible_points = points_visible_from_position(exploration_routine[1][0],exploration_routine[1][1], self.event.camera_field_of_view,self.event.camera_clipping_planes[1] )
@@ -111,7 +87,6 @@ class SequenceGenerator(object):
 
                     min_distance = min_distance/2
                     #points_visible(elem)
-            '''
             max_visible_position.append((7,-7))
             end_time = time.time()
             print (max_visible_position)
@@ -432,43 +407,7 @@ class SequenceGenerator(object):
 
 
 if __name__ == '__main__':
-    from networks.free_space_network import FreeSpaceNetwork
-    from utils import tf_util
-    import tensorflow as tf
-    sess = tf_util.Session()
-
-    with tf.variable_scope('nav_global_network'):
-        network = FreeSpaceNetwork(constants.GRU_SIZE, 1, 1)
-        network.create_net()
-    sess.run(tf.global_variables_initializer())
-    start_it = tf_util.restore_from_dir(sess, constants.CHECKPOINT_DIR)
-
-    import cv2
-
-    sequence_generator = SequenceGenerator(sess)
-    sequence_generator.planner_prob = 1
-    counter = 0
-    while True:
-        states, bounds, goal_pose = sequence_generator.generate_episode()
-        images = sequence_generator.debug_images
-        for im_dict in images:
-            counter += 1
-
-            gt_map = (2 - im_dict['label_memory'][:,:,0])
-
-            image_list = [
-                    im_dict['detections'] if constants.OBJECT_DETECTION else im_dict['color'],
-                    im_dict['state_image'],
-                    im_dict['memory_map'][:,:,0],
-                    gt_map + np.argmax(im_dict['memory_map'][:,:,1:constants.NUM_RECEPTACLES + 2], axis=2),
-                    gt_map + np.argmax(im_dict['memory_map'][:,:,constants.NUM_RECEPTACLES + 2:], axis=2),
-                    ]
-            titles = ['color', 'state', 'occupied', 'label receptacles', 'label objects']
-            print('possible pred', im_dict['possible_pred'])
-            image = drawing.subplot(image_list, 2, 2, constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT,
-                    titles=titles)
-            cv2.imshow('image', image[:,:,::-1])
-            cv2.waitKey(0)
+    pass
 
 
 

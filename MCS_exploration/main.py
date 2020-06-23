@@ -1,18 +1,15 @@
 import numpy as np
-import pdb
 import os
-import random
 import threading
-#import tensorflow as tf
 import time
 import json
 
-from networks.free_space_network import FreeSpaceNetwork
+#from networks.free_space_network import FreeSpaceNetwork
 #from supervised.sequence_generator import SequenceGenerator
 from sequence_generator import SequenceGenerator
 
-from utils import tf_util
-from utils import game_util
+#from utils import tf_util
+#from utils import game_util
 
 import constants
 #import mcs.cover_floor

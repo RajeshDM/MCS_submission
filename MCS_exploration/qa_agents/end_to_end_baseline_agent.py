@@ -1,4 +1,6 @@
+'''
 import numpy as np
+
 import os
 import cv2
 from utils import game_util
@@ -218,3 +220,4 @@ class EndToEndBaselineGraphAgent(QAAgent):
         cv2.imwrite('visualizations/images/state_%05d.jpg' % self.global_step_id, image[:, :, ::-1])
         return image
 
+'''
