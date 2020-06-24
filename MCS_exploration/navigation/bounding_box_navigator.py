@@ -3,9 +3,10 @@ from MCS_exploration.navigation.visibility_road_map import ObstaclePolygon,Incre
 import random
 import math
 import matplotlib.pyplot as plt
-from tasks.bonding_box_navigation_mcs.fov import FieldOfView
+from MCS_exploration.navigation.fov import FieldOfView
 import cover_floor
 import time
+from shapely.geometry import Point, Polygon
 
 SHOW_ANIMATION = True
 random.seed(1)
@@ -117,6 +118,17 @@ class BoundingBoxNavigator:
 						#print ("adding new obstacles ", self.current_nav_steps)
 						self.scene_obstacles_dict_roadmap[obstacle_key] =1
 						roadmap.addObstacle(obstacle)
+
+			goal_obj_bonding_box = None
+			for id, box in self.scene_obstacles_dict.items():
+				if box.contains_goal((gx,gy)):
+					goal_obj_bonding_box = box.get_goal_bonding_box_polygon()
+					break
+			if not goal_obj_bonding_box:
+				dis_to_goal = math.sqrt((self.agentX-gx)**2 + (self.agentY-gy)**2)
+			else:
+				dis_to_goal = goal_obj_bonding_box.distance(Point(self.agentX, self.agentY))
+
 			if dis_to_goal < self.epsilon:
 				break
 
@@ -199,7 +211,7 @@ class BoundingBoxNavigator:
 			#		continue
 
 			#agent.game_state.step(action="MoveAhead", amount=0.5)
-			action={'action':"MoveAhead", 'amount':0.5}
+			action={'action':"MoveAhead", 'amount':stepSize}
 			agent.step(action)
 			rotation = agent.game_state.event.rotation
 			self.agentX = agent.game_state.event.position['x']
@@ -209,6 +221,9 @@ class BoundingBoxNavigator:
 									self.scene_obstacles_dict.values())
 
 			self.current_nav_steps += 1
+
+			if agent.game_state.number_actions >= 600 :
+				return
 
 			if agent.game_state.goals_found == True:
 				return

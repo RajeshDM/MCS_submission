@@ -1,8 +1,12 @@
-from tasks.bonding_box_navigation_mcs.visibility_road_map import IncrementalVisibilityRoadMap, ObstaclePolygon
+#from tasks.bonding_box_navigation_mcs.visibility_road_map import IncrementalVisibilityRoadMap, ObstaclePolygon
+#from tasks.bonding_box_navigation_mcs.fov import FieldOfView
+
+from MCS_exploration.navigation.visibility_road_map import IncrementalVisibilityRoadMap,ObstaclePolygon
+from MCS_exploration.navigation.fov import FieldOfView
+
 import random
 import math
 import matplotlib.pyplot as plt
-from tasks.bonding_box_navigation_mcs.fov import FieldOfView
 from shapely.geometry import Point, Polygon
 import shapely.geometry as sp
 from descartes import PolygonPatch
@@ -87,6 +91,7 @@ class BoundingBoxNavigator:
 		self.agentH = nav_env.step_output.rotation / 360 * (2 * math.pi)
 		self.epsilon = success_distance
 
+		self.current_nav_steps = 0
 		gx, gy = goal[0], goal[2]
 		sx, sy = self.agentX, self.agentY
 
@@ -100,8 +105,6 @@ class BoundingBoxNavigator:
 				roadmap.addObstacle(obstacle)
 
 		while self.current_nav_steps < 150:
-			dis_to_goal = math.sqrt((self.agentX - gx) ** 2 + (self.agentY - gy) ** 2)
-
 			for obstacle_key, obstacle in self.scene_obstacles_dict.items():
 				if self.scene_obstacles_dict_roadmap[obstacle_key] == 0:
 					# print("not added obstacle", self.current_nav_steps)
@@ -109,6 +112,17 @@ class BoundingBoxNavigator:
 						# print("adding new obstacles ", self.current_nav_steps)
 						self.scene_obstacles_dict_roadmap[obstacle_key] = 1
 						roadmap.addObstacle(obstacle)
+
+			goal_obj_bonding_box = None
+			for id, box in self.scene_obstacles_dict.items():
+				if box.contains_goal((gx,gy)):
+					goal_obj_bonding_box = box.get_goal_bonding_box_polygon()
+					break
+			if not goal_obj_bonding_box:
+				dis_to_goal = math.sqrt((self.agentX-gx)**2 + (self.agentY-gy)**2)
+			else:
+				dis_to_goal = goal_obj_bonding_box.distance(Point(self.agentX, self.agentY))
+
 			if dis_to_goal < self.epsilon:
 				break
 
@@ -153,6 +167,7 @@ class BoundingBoxNavigator:
 			self.agentX = nav_env.step_output.position['x']
 			self.agentY = nav_env.step_output.position['z']
 			self.agentH = nav_env.step_output.rotation / 360 * (2 * math.pi)
+			self.current_nav_steps += 1
 
 			if abs(rotation_degree) > 1e-2:
 				if 360 - abs(rotation_degree) > 1e-2:
@@ -162,6 +177,7 @@ class BoundingBoxNavigator:
 			self.agentX = nav_env.step_output.position['x']
 			self.agentY = nav_env.step_output.position['z']
 			self.agentH = nav_env.step_output.rotation / 360 * (2 * math.pi)
+			self.current_nav_steps += 1
 
 		return True
 
