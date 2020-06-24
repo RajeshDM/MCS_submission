@@ -1,6 +1,6 @@
 #!/bin/bash
 scene_type="retrieval"
-c_min=301
+c_min=393
 c_max=600
 filename="${scene_type}_${c_min}_${c_max}_final_result.txt"
 for (( c=$c_min; c<=$c_max; c++ ))

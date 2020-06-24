@@ -172,7 +172,7 @@ class SequenceGenerator(object):
         #rotation = self.agent.game_state.event.rotation / 180 * math.pi
         cover_floor.update_seen(self.event.position['x'],self.event.position['z'],self.agent.game_state,self.event.rotation,self.event.camera_field_of_view,self.agent.nav.scene_obstacles_dict.values())
 
-        cover_floor.explore_point(self.event.position['x'],self.event.position['z'],self.agent,self.agent.nav.scene_obstacles_dict.values())
+        cover_floor.explore_initial_point(self.event.position['x'],self.event.position['z'],self.agent,self.agent.nav.scene_obstacles_dict.values())
         exploration_routine = cover_floor.flood_fill(0,0, cover_floor.check_validity)
 
         if self.agent.game_state.goals_found:
@@ -263,7 +263,7 @@ class SequenceGenerator(object):
                                       self.agent.nav.scene_obstacles_dict.values())
             if self.agent.game_state.goals_found :
                 return
-            if self.agent.game_state.number_actions > constants.STEPS :
+            if self.agent.game_state.number_actions > constants.MAX_STEPS :
                 print ("Too many actions performed")
                 return
             if len(exploration_routine) == 0:

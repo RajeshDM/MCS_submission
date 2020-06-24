@@ -143,8 +143,8 @@ class IncrementalVisibilityRoadMap:
         offset_vec = math.atan2(math.sin(p_vec) + math.sin(n_vec),
                                 math.cos(p_vec) + math.cos(
                                     n_vec)) + math.pi / 2.0
-        offset_x = x - (self.robot_radius*1.5) * math.cos(offset_vec)
-        offset_y = y - (self.robot_radius*1.5) * math.sin(offset_vec)
+        offset_x = x - (self.robot_radius*5) * math.cos(offset_vec)
+        offset_y = y - (self.robot_radius*5) * math.sin(offset_vec)
         return offset_x, offset_y
 
     @staticmethod

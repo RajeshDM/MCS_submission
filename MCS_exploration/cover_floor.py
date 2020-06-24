@@ -345,6 +345,19 @@ def flood_fill(x,y, check_validity):
     return q
 
 
+def explore_initial_point(x,y, agent,obstacles):
+    #directions = 8
+    #event = agent.game_state.event
+    #camera_field_of_view = agent.game_state.event.camera_field_of_view
+    explore_point(x,y,agent,obstacles)
+    if agent.game_state.goals_found == True:
+        return
+    action = {'action':'RotateLook', 'horizon':30}
+    agent.game_state.step(action)
+    explore_point(x,y,agent,obstacles)
+    action = {'action':'RotateLook', 'horizon':-30}
+    agent.game_state.step(action)
+
 def explore_point(x,y, agent,obstacles):
     directions = 8
     event = agent.game_state.event
