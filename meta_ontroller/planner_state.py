@@ -74,17 +74,11 @@ class GameState:
                     config['goal']['metadata']['target_1']['id']
                 )
                 self.target_object_id = PlanParser.create_legal_object_name(config['goal']['metadata']['target_2']['id'])
-                target_object_info = config['goal']['metadata']['target_2']['info']
-                # if "sofa chair" in target_object_info:
-                #     print("Not support put object on sofa chair")
-                #     del self.object_loc_info[self.target_object_id]
-
                 for obj in config['objects']:
                     if obj['id'] == self.transfer_object_id:
                         continue
                     if "openable" in obj and obj["openable"] == True:
                         receptacle_object_id = PlanParser.create_legal_object_name(obj['id'])
-                        self.object_containment_info[self.transfer_object_id].append(receptacle_object_id)
                         if "opened" in obj:
                             self.object_open_close_info[receptacle_object_id] = True
                         else:
@@ -98,24 +92,6 @@ class GameState:
                     self.goal_predicate_list.append(
                         "(objectOnTopOf {} {})".format(self.transfer_object_id, self.target_object_id)
                     )
-            elif self.goal_category == "searchObjectInReceptacleTraining":
-                if "target" in config['goal']['metadata']:
-                    self.goal_object_id = PlanParser.create_legal_object_name(config['goal']['metadata']['target']['id'])
-                elif "target_1" in config['goal']['metadata']:
-                    self.goal_object_id = PlanParser.create_legal_object_name(config['goal']['metadata']['target_1']['id'])
-                del self.object_loc_info[self.goal_object_id]
-                receptacle_object_id = PlanParser.create_legal_object_name(config['goal']['metadata']['targetReceptacleId'])
-                self.object_containment_info[self.goal_object_id].append(receptacle_object_id)
-                for obj in config['objects']:
-                    if PlanParser.create_legal_object_name(obj['id']) != receptacle_object_id:
-                        continue
-                    if "opened" in obj:
-                        self.object_open_close_info[receptacle_object_id] = True
-                    else:
-                        self.object_open_close_info[receptacle_object_id] = False
-                self.goal_predicate_list.append(
-                    "(isOpened {})".format(receptacle_object_id)
-                )
 
 
 
