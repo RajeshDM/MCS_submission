@@ -202,7 +202,6 @@ class SequenceGenerator(object):
         print (self.agent.game_state.world_poly.area)
         #return
 
-        #z = 0
 
         while overall_area * 0.65 >  self.agent.game_state.world_poly.area or len(self.agent.game_state.discovered_objects) == 0 :
             points_checked = 0
