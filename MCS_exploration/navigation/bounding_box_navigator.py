@@ -222,7 +222,7 @@ class BoundingBoxNavigator:
 
 			self.current_nav_steps += 1
 
-			if agent.game_state.number_actions >= 600 :
+			if agent.game_state.number_actions >= 595 :
 				return
 
 			if agent.game_state.goals_found == True:

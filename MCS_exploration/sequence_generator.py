@@ -204,7 +204,7 @@ class SequenceGenerator(object):
 
         #z = 0
 
-        while overall_area * 0.65 >  self.agent.game_state.world_poly.area :
+        while overall_area * 0.65 >  self.agent.game_state.world_poly.area or len(self.agent.game_state.discovered_objects) == 0 :
             points_checked = 0
             #z+=1
             max_visible_position = []
@@ -263,7 +263,7 @@ class SequenceGenerator(object):
                                       self.agent.nav.scene_obstacles_dict.values())
             if self.agent.game_state.goals_found :
                 return
-            if self.agent.game_state.number_actions > 700 :
+            if self.agent.game_state.number_actions > constants.STEPS :
                 print ("Too many actions performed")
                 return
             if len(exploration_routine) == 0:
@@ -295,7 +295,7 @@ class SequenceGenerator(object):
             self.agent.step(action)
             if self.agent.game_state.goals_found :
                 return
-            if self.agent.game_state.number_actions > 700 :
+            if self.agent.game_state.number_actions > constants.MAX_STEPS :
                 print ("Too many actions performed")
                 return
 
