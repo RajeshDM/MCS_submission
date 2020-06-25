@@ -28,7 +28,9 @@ class GameState:
                 obj['position']['x'],
                 obj['position']['y'],
                 obj['position']['z'],
+                obj['agent_position']
             )
+            #self.object_loc_info[object_id] =
             if "opened" in obj:
                 self.object_open_close_info[object_id] = obj["opened"]
 
@@ -75,6 +77,8 @@ class GameState:
                 self.transfer_object_id = PlanParser.create_legal_object_name(
                     config['goal']['metadata']['target_1']['id']
                 )
+                if config['goal_in_hand'] == True:
+                    self.object_in_hand = PlanParser.create_legal_object_name(config['id_goal_in_hand'])
                 self.target_object_id = PlanParser.create_legal_object_name(config['goal']['metadata']['target_2']['id'])
                 for obj in config['objects']:
                     if obj['id'] == self.transfer_object_id:

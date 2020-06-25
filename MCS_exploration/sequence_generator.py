@@ -200,8 +200,6 @@ class SequenceGenerator(object):
 
         overall_area = abs(x_max-x_min) * abs (y_max-y_min)
         print (self.agent.game_state.world_poly.area)
-        #return
-
 
         while overall_area * 0.65 >  self.agent.game_state.world_poly.area or len(self.agent.game_state.discovered_objects) == 0 :
             points_checked = 0
@@ -276,7 +274,8 @@ class SequenceGenerator(object):
             flag = 0
             for object in self.agent.game_state.discovered_objects :
                 #distance_to_object =
-                if object['explored'] == 0  and object['locationParent'] == None and len(object['dimensions']) >0:
+                #if object['explored'] == 0  and object['locationParent'] == None and len(object['dimensions']) >0:
+                if object['explored'] == 0 :#and len(object['dimensions']) > 0:# and object['locationParent'] == None
                     flag = 1
                     distance_to_object = math.sqrt( (current_pos['x'] - object['position']['x'] )** 2 + (current_pos['z']-object['position']['z'])**2)
                 else :
@@ -303,7 +302,7 @@ class SequenceGenerator(object):
     def explore_object(self, object_id_to_search):
         uuid = object_id_to_search
         success_distance = constants.AGENT_STEP_SIZE
-        object_polygon = self.agent.nav.scene_obstacles_dict[uuid]
+        #object_polygon = self.agent.nav.scene_obstacles_dict[uuid]
         current_position = self.agent.game_state.event.position
         current_object_position = 0
         i = 0
@@ -320,10 +319,35 @@ class SequenceGenerator(object):
         number_vertices = 4
         min_distance = math.inf
         goal_poses = []
-        for i in range (4,4+number_vertices):
-            goal = [current_object['dimensions'][i]['x'],current_object['dimensions'][i]['y'],current_object['dimensions'][i]['z']]
 
-            distance_to_point = math.sqrt((current_position['x'] - goal[0]) ** 2 + (current_position['z'] - goal[2]) ** 2)
+        if len(current_object['dimensions'])==0:
+            #print ("right track")
+            if current_object['locationParent'] == None:
+                for obstacle_key, obstacle in self.agent.nav.scene_obstacles_dict.items():
+                    if obstacle.contains_goal((goal_object_centre[0],goal_object_centre[2])):
+                        #goal_inside_obstacle = True
+                        current_object['locationParent'] = obstacle_key
+                        break
+
+            if current_object['locationParent'] in self.agent.game_state.discovered_explored:
+                for elem in self.agent.game_state.discovered_objects:
+                    if elem['uuid'] == current_object['locationParent']:
+                        dimension_object = elem
+                        break
+                #dimension_object =self.agent.game_state.discovered_objects[current_object['locationParent']]
+            else:
+                return
+        else:
+            dimension_object = current_object
+
+        for i in range (4,4+number_vertices):
+            #goal = [current_object['dimensions'][i]['x'],current_object['dimensions'][i]['y'],current_object['dimensions'][i]['z']]
+            goal = [dimension_object['dimensions'][i]['x'],dimension_object['dimensions'][i]['y'],dimension_object['dimensions'][i]['z']]
+
+            if len(current_object['dimensions']) == 0:
+                distance_to_point = math.sqrt((goal_object_centre[0] - goal[0]) ** 2 + (goal_object_centre[2] - goal[2]) ** 2)
+            else:
+                distance_to_point = math.sqrt((current_position['x'] - goal[0]) ** 2 + (current_position['z'] - goal[2]) ** 2)
             #if distance_to_point < min_distance :
             #    goal_pose = goal
             #    min_distance = distance_to_point
@@ -332,21 +356,49 @@ class SequenceGenerator(object):
         #self.agent.nav.go_to_goal(goal_pose,self.agent,success_distance,self.graph,True)
 
         goal_poses = sorted(goal_poses, key = lambda x: x[1])
+        goal_poses_not_visited = goal_poses[:]
 
-        for goal_pose in goal_poses[:-2]:
+        #for goal_pose in goal_poses[:-2]:
+        for i in range (len(goal_poses)-1):
+            current_position = self.agent.game_state.event.position
+            #goal_pose = goal_poses[i]
+            #'''
+            min_distance_vertex = math.inf
+            for j in range(len(goal_poses_not_visited)):
+                if len(current_object['dimensions']) == 0:
+                    distance_to_point = math.sqrt(
+                        (goal_object_centre[0] - goal_poses_not_visited[j][0][0]) ** 2 +
+                        (goal_object_centre[2] - goal_poses_not_visited[j][0][2]) ** 2)
+                else:
+                    distance_to_point = math.sqrt((current_position['x'] - goal_poses_not_visited[j][0][0]) ** 2 +
+                                              (current_position['z'] - goal_poses_not_visited[j][0][2]) ** 2)
+                if min_distance_vertex > distance_to_point:
+                    goal_pose = goal_poses_not_visited[j]
+                    min_distance_vertex= distance_to_point
+            #'''
             goal_pose_loc = goal_pose[0]
+            goal_poses_not_visited.remove(goal_pose)
             goal_pose_x_z =(goal_pose_loc[0],goal_pose_loc[2])
             goal_pose_x_z = cover_floor.get_point_between_points(goal_pose_x_z,[goal_object_centre[0],goal_object_centre[2]],self.agent.nav_radius)
 
             goal_inside_obstacle = False
 
             for obstacle_key, obstacle in self.agent.nav.scene_obstacles_dict.items():
-                if obstacle.contains_goal(goal_pose_loc):
+                if obstacle.contains_goal(goal_pose_x_z):
                     goal_inside_obstacle = True
                     break
 
             if goal_inside_obstacle :
                 continue
+
+
+            if len(current_object['dimensions']) == 0 :
+                if goal_object_centre[1] > self.agent.game_state.event.position['y']:
+                    return
+                if current_object['openable'] == True :
+                    return
+                if i == 2:
+                    return
 
             nav_success = self.agent.nav.go_to_goal(goal_pose_x_z, self.agent, success_distance)
 
@@ -358,6 +410,14 @@ class SequenceGenerator(object):
             omega = FaceTurnerResNet.get_head_tilt(goal_object_centre, self.agent.game_state.event) - self.agent.game_state.event.head_tilt
             action = {'action':'RotateLook', 'rotation':-theta*180/math.pi, 'horizon':omega}
             self.agent.step(action)
+
+            if current_object['openable'] == True:
+                if i == 2 :
+                    break
+            elif current_object['openable'] == False:
+                if i == 1 :
+                    break
+
 
             object_visible = False
             for elem in self.agent.game_state.event.object_list :
@@ -388,7 +448,8 @@ class SequenceGenerator(object):
                 elif status == "NOT_OPENABLE" or status == "NOT_INTERACTABLE" or status == "NOT_OBJECT" :
                     self.agent.game_state.discovered_objects[current_object_position]['openable'] = False
                     print ("opening failed")
-                    return
+                    continue
+                    #return
                 elif status == "OBSTRUCTED" or "OUT_OF_REACH":
                     #TODO Maybe add something different for out of reach later
                     continue
@@ -407,6 +468,21 @@ class SequenceGenerator(object):
                     self.agent.game_state.discovered_objects[j][
                         'agent_rotation'] = self.agent.game_state.event.rotation
                     self.agent.game_state.discovered_objects[j]['locationParent'] =parent_obj_id
+                    self.agent.game_state.discovered_objects[j]['explored'] =1
+                    category = self.agent.game_state.event.goal.metadata['category']
+                    target_id = None
+                    if category == "transferral":
+                        target_id = self.agent.game_state.event.goal.metadata['target_1']['id']
+                    if category == "retrieval":
+                        target_id = self.agent.game_state.event.goal.metadata['target']['id']
+
+                    if target_id != None :
+                        if target_id == elem['uuid']:
+                            action = {'action':'PickupObject', 'objectId':elem['uuid']}
+                            self.agent.game_state.step(action)
+                            if self.agent.game_state.event.return_status == 'SUCCESSFUL':
+                                self.agent.game_state.goal_in_hand = True
+                                self.agent.game_state.id_goal_in_hand = elem['uuid']
                     break
 
 

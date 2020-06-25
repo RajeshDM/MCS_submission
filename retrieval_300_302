@@ -1,0 +1,12 @@
+scene,300,reward,1,actions,1,exploration_success,True,total success,1,exploration success until now,1
+scene,301,reward,0,actions,443,exploration_success,False,total success,1,exploration success until now,1
+scene,302,reward,1,actions,195,exploration_success,True,total success,2,exploration success until now,2
+scene,300,reward,1,actions,1,exploration_success,True,total success,1,exploration success until now,1
+scene,301,reward,0,actions,438,exploration_success,False,total success,1,exploration success until now,1
+scene,302,reward,1,actions,195,exploration_success,True,total success,2,exploration success until now,2
+scene,300,reward,1,actions,1,exploration_success,True,total success,1,exploration success until now,1
+scene,301,reward,0,actions,398,exploration_success,False,total success,1,exploration success until now,1
+scene,302,reward,1,actions,195,exploration_success,True,total success,2,exploration success until now,2
+scene,300,reward,1,actions,1,exploration_success,True,total success,1,exploration success until now,1
+scene,301,reward,0,actions,398,exploration_success,False,total success,1,exploration success until now,1
+scene,302,reward,1,actions,195,exploration_success,True,total success,2,exploration success until now,2

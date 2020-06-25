@@ -79,6 +79,8 @@ class GameState(object):
         self.world_poly = None
         self.new_found_objects = []
         self.new_object_found = False
+        self.goal_in_hand = False
+        self.id_goal_in_hand = None
 
     def process_frame(self, run_object_detection=False):
         self.im_count += 1
@@ -118,9 +120,11 @@ class GameState(object):
             self.goals_found = False
             self.scene_name = scene_name
             self.number_actions = 0
+            self.id_goal_in_hand = None
             #print ("Full reset - in the first time of load")
             #grid_file = 'layouts/%s-layout_%s.npy' % (scene_name,str(constants.AGENT_STEP_SIZE))
             self.graph = None
+            self.goal_in_hand = False
             if seed is not None:
                 self.local_random.seed(seed)
             lastActionSuccess = False
@@ -147,8 +151,9 @@ class GameState(object):
                     self.discovered_objects.append(obj.__dict__)
                     self.discovered_objects[-1]['locationParent'] = None
                     self.discovered_objects[-1]['explored'] = 0
+                    self.discovered_objects[-1]['openable'] = None
             self.add_obstacle_func(self.event)
-            print ("type of event 2 : ", type(self.event))
+            #print ("type of event 2 : ", type(self.event))
             lastActionSuccess = self.event.return_status
             #break
 
@@ -186,7 +191,10 @@ class GameState(object):
                 action = "RotateLook, horizon=%d" % action['horizon']
         elif action['action'] == 'OpenObject':
             action = "OpenObject,objectId="+ str(action["objectId"])
-            print ("constructed action for open object", action)
+            #print ("constructed action for open object", action)
+        elif action['action'] == 'PickupObject':
+            action = "PickupObject,objectId=" + str(action['objectId'])
+
         '''
         '''
         #print (action)
@@ -211,6 +219,7 @@ class GameState(object):
                 self.new_found_objects.append(obj.__dict__)
                 self.discovered_objects[-1]['explored'] = 0
                 self.discovered_objects[-1]['locationParent'] = None
+                self.discovered_objects[-1]['openable'] = None
 
         self.add_obstacle_func(self.event)
         self.number_actions += 1

@@ -131,6 +131,13 @@ class MetaController:
         elif action_dict['action'] == "DropObjectNextTo":
             FaceTurnerResNet.look_to_front(self.face_env)
             self.env.step(action="RotateLook", horizon=9.536743e-06)
+            self.obj_env.step("DropObject", object_id=action_dict['objectId'], epsd_collector=epsd_collector)
+            if self.env.step_output.return_status == "SUCCESSFUL":
+                self.plannerState.knowledge.objectNextTo[action_dict['objectId']] = action_dict['goal_objectId']
+                self.plannerState.object_in_hand = None
+                print("Drop Successful, if reward 0 then it should be out of range.")
+
+            '''
             for _ in range(10):
                 print("Head_tilt before drop object {}".format(self.env.step_output.head_tilt))
                 self.obj_env.step("DropObject", object_id=action_dict['objectId'], epsd_collector=epsd_collector)
@@ -140,6 +147,7 @@ class MetaController:
                     print("Drop Successful, if reward 0 then it should be out of range.")
                     break
                 self.env.step(action="MoveBack", amount=0.05)
+            '''
             if self.plannerState.object_in_hand:
                 print("DropObject fail")
                 return False

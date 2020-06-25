@@ -67,7 +67,13 @@ def explore_scene(sequence_generator,event, scene_type=None, scene_number=None):
     #print (config_data['goal'])
     config_data['goal']['category'] = sequence_generator.event.goal.metadata['category']
     config_data['obstacles'] = sequence_generator.agent.nav.scene_obstacles_dict
-    config_data['goal_found'] = sequence_generator.agent.game_state.goals_found
+    config_data['goals_found'] = sequence_generator.agent.game_state.goals_found
+
+    if sequence_generator.agent.game_state.goal_in_hand == True:
+        config_data['goal_in_hand'] = True
+        config_data['id_goal_in_hand'] = sequence_generator.agent.game_state.id_goal_in_hand
+    else :
+        config_data['goal_in_hand'] = False
 
     print ("Agent data after end of exploration : x,y,rotation", config_data['performerStart']['position']['x'], config_data['performerStart']['position']['z'], config_data['performerStart']['rotation']['y'] )
     print ("Goal object found status : ", sequence_generator.agent.game_state.goals_found)
