@@ -27,8 +27,7 @@ class GameState:
             self.object_loc_info[object_id] = (
                 obj['position']['x'],
                 obj['position']['y'],
-                obj['position']['z'],
-                obj['agent_position']
+                obj['position']['z']
             )
             #self.object_loc_info[object_id] =
             if "opened" in obj:
