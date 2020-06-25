@@ -54,9 +54,30 @@ class MetaController:
         assert 'action' in action_dict
         if action_dict['action'] == "GotoLocation":
             goal = get_goal(action_dict['location'])
-            success_distance = machine_common_sense.mcs_controller_ai2thor.MAX_REACH_DISTANCE - 0.2
+            current_object_id = None
+
+            for objectId,object_data in self.plannerState.object_loc_info.items():
+                #object_data == goal:
+                flag = 0
+                for k in range(len(object_data)):
+                    if round(object_data[k],2) != goal[k]:
+                        print (round(object_data[k],2), goal[k])
+                        flag = 1
+                        break
+                if flag == 0 :
+                    current_object_id = objectId
+                    break
+
+            current_object_loc = self.plannerState.object_loc_info[current_object_id]
+            if len(current_object_loc) == 3 :
+                final_goal = goal[:]
+                success_distance = machine_common_sense.mcs_controller_ai2thor.MAX_REACH_DISTANCE - 0.7
+            else :
+                final_goal = (float(current_object_loc[3]['x']), float(current_object_loc[3]['z']), float(current_object_loc[3]['z']))
+                success_distance = 0
+
             success = self.nav.go_to_goal(
-                self.nav_env, goal, success_distance)
+                self.nav_env, final_goal, success_distance)
             if not success:
                 print("Navigation Fail")
                 return False

@@ -152,6 +152,7 @@ class GameState(object):
                     self.discovered_objects[-1]['locationParent'] = None
                     self.discovered_objects[-1]['explored'] = 0
                     self.discovered_objects[-1]['openable'] = None
+                    #self.discovered_objects[-1]['agent_position'] = None
             self.add_obstacle_func(self.event)
             #print ("type of event 2 : ", type(self.event))
             lastActionSuccess = self.event.return_status

@@ -382,9 +382,11 @@ def update_seen(x,y,game_state,rotation,camera_field_of_view,obstacles):
     fov = FieldOfView([x, y, rotation_rad], camera_field_of_view / 180.0 * math.pi, obstacles)
     poly = fov.getFoVPolygon(17)
 
-    view = Polygon(zip(poly.x_list, poly.y_list))
-
-    game_state.world_poly = game_state.world_poly.union(view)
+    try:
+        view = Polygon(zip(poly.x_list, poly.y_list))
+        game_state.world_poly = game_state.world_poly.union(view)
+    except:
+        return
     world = game_state.world_poly
 
     #obstacles_polygons = [ObstaclePolygon(obstacle) for obstacle in obstacles ]
@@ -435,8 +437,11 @@ def get_point_new_coverage(x,y,game_state, rotation,camera_field_of_view,obstacl
             intersection_free_points[1].append(y)
 
     #newPoly = Polygon(zip(checkPoly.x_list, checkPoly.y_list))
-    newPoly = Polygon(zip(intersection_free_points[0],intersection_free_points[1]))
-    newPoly = newPoly.difference(game_state.world_poly.buffer(0))
+    try :
+        newPoly = Polygon(zip(intersection_free_points[0], intersection_free_points[1]))
+        newPoly = newPoly.difference(game_state.world_poly.buffer(0))
+    except:
+        return 0
 
     world = game_state.world_poly
 

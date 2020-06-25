@@ -24,11 +24,19 @@ class GameState:
         self.object_open_close_info = {}
         for obj in config['objects']:
             object_id = PlanParser.create_legal_object_name(obj['uuid'])
-            self.object_loc_info[object_id] = (
-                obj['position']['x'],
-                obj['position']['y'],
-                obj['position']['z']
-            )
+            if 'agent_position' not in obj:
+                self.object_loc_info[object_id] = (
+                    obj['position']['x'],
+                    obj['position']['y'],
+                    obj['position']['z']
+                )
+            else :
+                self.object_loc_info[object_id] = (
+                    obj['position']['x'],
+                    obj['position']['y'],
+                    obj['position']['z'],
+                    obj['agent_position']
+                )
             #self.object_loc_info[object_id] =
             if "opened" in obj:
                 self.object_open_close_info[object_id] = obj["opened"]

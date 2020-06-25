@@ -26,8 +26,8 @@ if __name__ == "__main__":
     start_scene_number = 300
     end_scene_number = 400
     scene_type = 'retrieval'
-    #env = McsEnv(task="interaction_scenes", scene_type="transferral", start_scene_number=11)
-    env = McsEnv(task="interaction_scenes", scene_type="retrieval", start_scene_number= 3)
+    env = McsEnv(task="interaction_scenes", scene_type="transferral", start_scene_number=84)
+    #env = McsEnv(task="interaction_scenes", scene_type="retrieval", start_scene_number= 1)
     #env = McsEnv(task="interaction_scenes", scene_type='traversal', start_scene_number=836)
     #env = McsEnv(task="interaction_scenes", scene_type=scene_type, start_scene_number=start_scene_number)
     metaController = MetaController(env)
